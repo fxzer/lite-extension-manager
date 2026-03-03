@@ -1,0 +1,458 @@
+{
+  "ext_name": {
+    "message": "Extension Manager"
+  },
+  "ext_desc": {
+    "message": "A lightweight extension manager with grouping support"
+  },
+  "add": {
+    "message": "Add"
+  },
+  "update": {
+    "message": "Update"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "help": {
+    "message": "Help"
+  },
+  "delete": {
+    "message": "Uninstall"
+  },
+  "got_it": {
+    "message": "Got it"
+  },
+  "no_more_prompts": {
+    "message": "No more prompts"
+  },
+  "enable_extension": {
+    "message": "Enable"
+  },
+  "disable_extension": {
+    "message": "Disable"
+  },
+  "uninstall_extension": {
+    "message": "Uninstall"
+  },
+  "uninstall_extension_confirm": {
+    "message": "Uninstall '$1' ?"
+  },
+  "extension_not_enable": {
+    "message": "Extension not enabled"
+  },
+  "app_not_enable": {
+    "message": "not enable"
+  },
+  "about_title": {
+    "message": "About"
+  },
+  "about_feedback": {
+    "message": "Feedback"
+  },
+  "about_version": {
+    "message": "version"
+  },
+  "about_version_update_tip": {
+    "message": "Version too low, recommend upgrading."
+  },
+  "column_index": {
+    "message": "Index"
+  },
+  "column_time": {
+    "message": "Time"
+  },
+  "column_event": {
+    "message": "Event"
+  },
+  "column_name": {
+    "message": "Extension Name"
+  },
+  "column_version": {
+    "message": "Version"
+  },
+  "column_remark": {
+    "message": "Remark"
+  },
+  "column_extension": {
+    "message": "Extension Name"
+  },
+  "history_clean_record": {
+    "message": "Clear Record"
+  },
+  "history_clean_confirm_title": {
+    "message": "Clear History Records"
+  },
+  "history_clean_confirm_content": {
+    "message": "Are you sure to delete all the history records?"
+  },
+  "history_solo_ext": {
+    "message": "Show records of this extension only"
+  },
+  "history_hide_ext": {
+    "message": "Hide this extension's records"
+  },
+  "history_hidden_record": {
+    "message": "Hidden Records"
+  },
+  "extension_settings": {
+    "message": "Settings"
+  },
+  "management_import_title": {
+    "message": "Import Extension"
+  },
+  "management_export_title": {
+    "message": "Export Extension"
+  },
+  "history_title": {
+    "message": "History"
+  },
+  "history_install": {
+    "message": "Install"
+  },
+  "history_uninstall": {
+    "message": "Uninstall"
+  },
+  "history_update": {
+    "message": "Updated"
+  },
+  "history_enable": {
+    "message": "Enable"
+  },
+  "history_disable": {
+    "message": "Disable"
+  },
+  "history_browser_update": {
+    "message": "Browser Updated"
+  },
+  "management_show_operation": {
+    "message": "Show operating menu"
+  },
+  "management_title": {
+    "message": "Management"
+  },
+  "option_title": {
+    "message": "Options"
+  },
+  "setting_import_finish": {
+    "message": "Import Success"
+  },
+  "setting_import_fail": {
+    "message": "Import Fail"
+  },
+  "setting_popup_setting_search": {
+    "message": "Search"
+  },
+  "setting_popup_setting_display": {
+    "message": "Content Display"
+  },
+  "setting_import_config": {
+    "message": "Import Config File"
+  },
+  "setting_export_config": {
+    "message": "Export Config File"
+  },
+  "setting_restore_default": {
+    "message": "Restore Default"
+  },
+  "setting_restore_default_tip": {
+    "message": "Reset preference settings to default"
+  },
+  "setting_clear_title": {
+    "message": "Clear Configuration"
+  },
+  "setting_clear_confirm_title": {
+    "message": "Delete All Configuration and Settings"
+  },
+  "setting_clear_confirm_content": {
+    "message": "This operation will delete all configuration data."
+  },
+  "setting_list_gird_show_name_tip": {
+    "message": "In grid view, whether to display the extension name"
+  },
+  "setting_dark_mode_title": {
+    "message": "Dark Mode"
+  },
+  "setting_dark_mode_light": {
+    "message": "Light"
+  },
+  "setting_dark_mode_dark": {
+    "message": "Dark"
+  },
+  "setting_dark_mode_system": {
+    "message": "System"
+  },
+  "management_import": {
+    "message": "Import"
+  },
+  "management_import_source": {
+    "message": "Source"
+  },
+  "management_import_file_text": {
+    "message": "Import File/Paste Text"
+  },
+  "management_import_install_extension": {
+    "message": "Install Extension"
+  },
+  "management_prev_step": {
+    "message": "Previous"
+  },
+  "management_next_step": {
+    "message": "Next"
+  },
+  "management_import_from_clipboard": {
+    "message": "Paste from clipboard"
+  },
+  "management_import_from_file": {
+    "message": "Read from file"
+  },
+  "management_open_web_store": {
+    "message": "Open web store"
+  },
+  "management_import_prepare": {
+    "message": "Prepare to import"
+  },
+  "management_import_store_source": {
+    "message": "Web store source"
+  },
+  "management_import_no_input": {
+    "message": "No input"
+  },
+  "management_import_parse_failed": {
+    "message": "Cannot parse the input text"
+  },
+  "management_store_official": {
+    "message": "Official WebStore"
+  },
+  "management_export_target": {
+    "message": "Target"
+  },
+  "management_export_content": {
+    "message": "Content"
+  },
+  "management_export_type": {
+    "message": "Export method"
+  },
+  "management_export_target_desc": {
+    "message": "Select extensions to share/export"
+  },
+  "management_export_content_desc": {
+    "message": "Select custom content for export"
+  },
+  "management_export_type_desc": {
+    "message": "Set export method"
+  },
+  "management_export_all_extension": {
+    "message": "All extensions"
+  },
+  "management_export_part_extension": {
+    "message": "Partial extension"
+  },
+  "management_export_no_extension_selected": {
+    "message": "No extensions selected"
+  },
+  "management_export_extension_base_info": {
+    "message": "Extension basic information"
+  },
+  "management_export_share_text": {
+    "message": "Share text"
+  },
+  "management_export_download": {
+    "message": "Download"
+  },
+  "management_export_copy_to_clipboard": {
+    "message": "Copy to clipboard"
+  },
+  "management_export_share_text_title": {
+    "message": "I have shared $1 browser extensions with you. Copy this text and import it into the extension manager"
+  },
+  "management_export_md_template_new": {
+    "message": "New template"
+  },
+  "management_export_md_template_default": {
+    "message": "Default Template"
+  },
+  "snapshot_disable_all": {
+    "message": "Disable All"
+  },
+  "snapshot_enable_all": {
+    "message": "Enable All"
+  },
+  "snapshot_capture": {
+    "message": "Capture Snapshot"
+  },
+  "snapshot_restore": {
+    "message": "Restore Snapshot"
+  },
+  "snapshot_rename": {
+    "message": "Rename Snapshot"
+  },
+  "snapshot_delete_all": {
+    "message": "Delete All Snapshots"
+  },
+  "mode_title": {
+    "message": "Focus Modes"
+  },
+  "mode_new": {
+    "message": "New Mode"
+  },
+  "mode_edit": {
+    "message": "Edit Mode"
+  },
+  "mode_name_cannot_empty": {
+    "message": "Mode name cannot be empty"
+  },
+  "mode_name_too_long": {
+    "message": "Mode name cannot exceed 6 characters"
+  },
+  "mode_name": {
+    "message": "Mode Name"
+  },
+  "mode_desc": {
+    "message": "Mode Description"
+  },
+  "mode_default_name": {
+    "message": "Default"
+  },
+  "mode_minimal_name": {
+    "message": "Minimal"
+  },
+  "mode_development_name": {
+    "message": "Development"
+  },
+  "mode_include": {
+    "message": "Enabled Extensions in \"$1\""
+  },
+  "mode_not_include": {
+    "message": "Disabled Extensions"
+  },
+  "mode_system_cannot_delete": {
+    "message": "System modes cannot be deleted"
+  },
+  "mode_delete_title": {
+    "message": "Delete Mode"
+  },
+  "mode_delete_confirm": {
+    "message": "Delete mode \"$1\"?"
+  },
+  "mode_delete_success": {
+    "message": "Deleted \"$1\""
+  },
+  "mode_may_redundant": {
+    "message": "Possibly a repeat operation"
+  },
+  "mode_may_redundant_desc": {
+    "message": "This extension is already in the Default mode, it will always be activated when switching modes"
+  },
+  "mode_sort_by_name": {
+    "message": "Sort by Name"
+  },
+  "mode_sort_by_install_time": {
+    "message": "Sort by Install Time"
+  },
+  "mode_search_placeholder": {
+    "message": "Search Extensions"
+  },
+  "sort_frequency": {
+    "message": "Frequency"
+  },
+  "sort_name": {
+    "message": "Extension Name"
+  },
+  "detail_id": {
+    "message": "ID"
+  },
+  "detail_version": {
+    "message": "Version"
+  },
+  "detail_type": {
+    "message": "Type"
+  },
+  "detail_install_type": {
+    "message": "Install Type"
+  },
+  "detail_install_time": {
+    "message": "Install Time"
+  },
+  "detail_update_time": {
+    "message": "Update Time"
+  },
+  "detail_homepage": {
+    "message": "Homepage"
+  },
+  "detail_webstore": {
+    "message": "Store"
+  },
+  "detail_description": {
+    "message": "Description"
+  },
+  "detail_unknown": {
+    "message": "Unknown"
+  },
+  "save_success": {
+    "message": "Saved successfully"
+  },
+  "save_failed": {
+    "message": "Save failed"
+  },
+  "input_name": {
+    "message": "Enter name"
+  },
+  "search_extension": {
+    "message": "Search Extensions"
+  },
+  "filter_extension": {
+    "message": "Filter Extensions"
+  },
+  "mode_description": {
+    "message": "Enabling/disabling extensions in the mode will automatically sync to the corresponding mode plugin status in the Popup."
+  },
+  "exclude_other_mode_extensions": {
+    "message": "Exclude extensions from other modes"
+  },
+  "enabled": {
+    "message": "Enabled"
+  },
+  "data_save_failed": {
+    "message": "Failed to save configuration"
+  },
+  "data_save_failed_quota": {
+    "message": "Save failed, exceeded browser storage limit"
+  },
+  "history_feature_closed": {
+    "message": "History feature is disabled"
+  },
+  "get_short_name_failed": {
+    "message": "Failed to get short name from extension data"
+  },
+  "google": {
+    "message": "Google"
+  },
+  "microsoft": {
+    "message": "Edge"
+  },
+  "crxsoso": {
+    "message": "SoSo"
+  },
+  "search_placeholder_local_store": {
+    "message": "Enter for local search, Shift+Enter for store search (select source on right)"
+  },
+  "group_name_too_long": {
+    "message": "Group name cannot exceed 6 characters"
+  },
+  "record_on": {
+    "message": "On"
+  },
+  "record_off": {
+    "message": "Off"
+  },
+  "popup_show_ext_name": {
+    "message": "Show Extension Name"
+  },
+  "popup_hide_ext_name": {
+    "message": "Hide Extension Name"
+  }
+}

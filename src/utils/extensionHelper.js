@@ -1,0 +1,183 @@
+import { isEdgeRuntime } from ".../utils/channelHelper"
+import { downloadImageDataUrl } from "./utils"
+
+export const getIcon = function (extension, size = 16) {
+  const { icons } = extension
+
+  // 复制数组后按尺寸从小到大排列，避免修改原始数组
+  const sortedIcons = [...icons].sort((a, b) => a.size - b.size)
+
+  // Get retina size if necessary
+  size *= window.devicePixelRatio
+
+  // 从小到大遍历，找到第一个 >= 目标尺寸的图标（即满足要求的最小尺寸图标）
+  for (const icon of sortedIcons) {
+    if (icon.size >= size) {
+      return icon.url
+    }
+  }
+
+  // 如果没有找到足够大的，则返回最大的那个
+  return sortedIcons[sortedIcons.length - 1]?.url ?? defaultPuzzleIcon
+}
+
+/**
+ * 下载 ICON 并将其转换成 dataUrl，如果失败，则返回空字符串; 仅支持在 DOM 下调用
+ */
+export const downloadIconDataUrl = async function (appInfo) {
+  if (!appInfo) {
+    return ""
+  }
+  let iconUrl = undefined
+  if (appInfo.icons) {
+    let maxSize = 0
+    for (let j = 0; j < appInfo.icons.length; j++) {
+      const iconInfo = appInfo.icons[j]
+      if (iconInfo.size > maxSize) {
+        maxSize = iconInfo.size
+        iconUrl = iconInfo.url
+      }
+    }
+  }
+  if (!iconUrl) {
+    return ""
+  } else {
+    const uri = await downloadImageDataUrl(iconUrl)
+    return uri
+  }
+}
+
+/**
+ * 根据名称，生成一个默认的，使用第一个字符的文字 ICON
+ */
+export const buildTextIcon = async (name) => {
+  if (!name) {
+    return ""
+  }
+  const canvas = new OffscreenCanvas(128, 128)
+  const ctx = canvas.getContext("2d")
+  ctx.font = "120px Arial"
+  ctx.fillStyle = "grey"
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = "white"
+  ctx.fillText(name[0], 22, 110)
+  const blob = await canvas.convertToBlob()
+  return URL.createObjectURL(blob)
+}
+
+export const isAppExtension = function (ext) {
+  const appTypes = ["hosted_app", "packaged_app", "legacy_packaged_app"]
+  return appTypes.includes(ext.type)
+}
+
+export const isExtExtension = function (ext) {
+  const extTypes = ["extension"]
+  return extTypes.includes(ext.type)
+}
+
+export const filterExtensions = (extensions, filter) => {
+  if (!extensions) {
+    return []
+  }
+  return extensions.filter(filter)
+}
+
+/**
+ * 对扩展进行排序，安装是否启用 + 名称排序，如果 options 中配置了 ignoreEnable，则只按照名称排序。
+ */
+export const sortExtension = (extensions, options) => {
+  if (!extensions || extensions.length === 0) {
+    return []
+  }
+
+  options = options || {}
+
+  if (typeof extensions[0] !== "object") {
+    throw Error("sortExtension extensions param should be object type")
+  }
+
+  const list = []
+  // distinct
+  extensions.forEach((ext) => {
+    if (list.find((i) => i.id === ext.id)) {
+      return
+    }
+    list.push(ext)
+  })
+
+  const getCompareValue = (ext) => {
+    if (options.useAlias === undefined || options.useAlias === true) {
+      return ext.__attach__?.alias ? ext.__attach__?.alias : ext.name
+    }
+    if (options.useAlias === false) {
+      return ext.name
+    }
+    return ext.name
+  }
+
+  return list.sort((a, b) => {
+    const aName = getCompareValue(a)
+    const bName = getCompareValue(b)
+    if (options.ignoreEnable) {
+      return aName.localeCompare(bName) // Sort by name
+    } else {
+      if (a.enabled === b.enabled) {
+        return aName.localeCompare(bName) // Sort by name
+      }
+      return a.enabled < b.enabled ? 1 : -1 // Sort by state
+    }
+  })
+}
+
+/**
+ * 根据额外的配置数据，给插件添加附加的一些数据，如别名，备注等
+ */
+export const appendAdditionInfo = (extensions, managementOptions) => {
+  if (!extensions) {
+    return []
+  }
+  if (!managementOptions || !managementOptions.extensions) {
+    return extensions
+  }
+
+  for (const extension of extensions) {
+    const addition = managementOptions.extensions.find((ext) => ext.extId === extension.id)
+    if (!addition) {
+      extension.__attach__ = {}
+      continue
+    }
+    extension.__attach__ = addition
+  }
+
+  return extensions
+}
+
+export const getHomepageUrl = (item, alwaysLinkToStore) => {
+  if (!alwaysLinkToStore) {
+    return item.homepageUrl
+  }
+
+  const updateUrl = item.updateUrl
+
+  if (!updateUrl) {
+    return item.homepageUrl
+  }
+
+  if (updateUrl.includes(".google.com")) {
+    return "https://chromewebstore.google.com/detail/" + item.id
+  } else if (updateUrl.includes("edge.microsoft.com")) {
+    return "https://microsoftedge.microsoft.com/addons/detail/" + item.id
+  } else {
+    return item.homepageUrl
+  }
+}
+
+export const getOriginSettingUrl = (item) => {
+  if (isEdgeRuntime()) {
+    // edge://extensions/?id=xxx
+    return `edge://extensions/?id=${item.id}`
+  } else {
+    // chrome://extensions/?id=xxx
+    return `chrome://extensions/?id=${item.id}`
+  }
+}

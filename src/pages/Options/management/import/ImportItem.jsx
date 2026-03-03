@@ -1,0 +1,83 @@
+import React, { memo, useEffect, useState } from "react"
+
+import { Button } from "antd"
+import styled from "styled-components"
+
+import PuzzleImage from ".../assets/puzzle.svg"
+import analytics from ".../utils/googleAnalyze"
+import { getLang } from ".../utils/utils"
+import ExtensionChannelLabel from "../ExtensionChannelLabel"
+
+const ImportItem = memo(({ extension, installed }) => {
+  const [icon, setIcon] = useState(null)
+
+  const openStore = (e) => {
+    e.stopPropagation()
+    extension.openStoreLink(extension)
+
+    analytics.fireEvent("extension_import_open_single_link")
+  }
+
+  useEffect(() => {
+    if (extension.icon) {
+      setIcon(extension.icon)
+    }
+  }, [extension])
+
+  return (
+    <Style>
+      <div className="import-item-container">
+        <img src={icon ?? PuzzleImage} width={36} height={36} alt="logo" />
+
+        <div className="ext-title-info">
+          <span className="ext-title">
+            <span>{extension.name}</span>
+            <ExtensionChannelLabel channel={extension.channel}></ExtensionChannelLabel>
+          </span>
+        </div>
+
+        {!installed && extension.webStoreUrl && (
+          <div className="ext-import-operations">
+            <Button className="ext-import-btn" type="primary" onClick={openStore}>
+              {getLang("management_open_web_store")}
+            </Button>
+          </div>
+        )}
+      </div>
+    </Style>
+  )
+})
+
+export default ImportItem
+
+const Style = styled.div`
+  margin-top: 8px;
+
+  .import-item-container {
+    display: flex;
+    align-items: center;
+
+    height: 60px;
+    padding: 12px 12px 8px 12px;
+
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+  }
+
+  .ext-title-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    margin: 0 0 0 12px;
+
+    .ext-title {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+  .ext-import-operations {
+    margin: 0 0 0 auto;
+  }
+`

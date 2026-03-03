@@ -1,0 +1,336 @@
+import React, { memo, useEffect, useRef, useState } from "react"
+
+import { DeleteOutlined, SettingOutlined, ShopOutlined, ToolOutlined } from "@ant-design/icons"
+import { message } from "antd"
+import classNames from "classnames"
+
+import { ManualEnableCounter } from ".../storage/local/ManualEnableCounter"
+import { getHomepageUrl, getIcon, getOriginSettingUrl } from ".../utils/extensionHelper.js"
+import { getLang } from ".../utils/utils"
+import { isStringEmpty } from ".../utils/utils.js"
+import { ExtensionGridItemStyle } from "./ExtensionGridItemStyle"
+
+const manualEnableCounter = new ManualEnableCounter()
+
+const ExtensionGridItem = memo(({ item, options, isShowAppName: isShowAppNameProp, enabled, currentMode, onItemMove }) => {
+  const [messageApi, contextHolder] = message.useMessage()
+
+  // 扩展存在设置页面
+  const existOptionPage = !isStringEmpty(item.optionsUrl)
+  // 扩展存在 Home 页面
+  const existHomePage = !isStringEmpty(item.homepageUrl)
+
+  // 扩展是否可用
+  const [itemEnable, setItemEnable] = useState(enabled ?? item.enabled)
+
+  useEffect(() => {
+    setItemEnable(item.enabled)
+  }, [item, enabled])
+
+  // 交互状态：鼠标是否 hover
+  const [isMouseEnter, setIsMouseEnter] = useState(false)
+  // 交互状态：鼠标右键是否点击
+  const [isMouseRightClick, setIsMouseRightClick] = useState(false)
+  // 交互状态：菜单是否显示
+  const [isMenuShow, setIsMenuShow] = useState(false)
+  // UI 状态：菜单显示的位置
+  const [isMenuOnRight, setIsMenuOnRight] = useState(true)
+
+  // 是否显示 APP 名称（优先使用父组件传入的 prop，保证立即响应）
+  const isShowAppNameInGirdView = isShowAppNameProp ?? options.setting.isShowAppNameInGirdView ?? true
+  // 禁用扩展使用灰色（默认启用）
+  const grayStyleOfDisable = options.setting.isGaryStyleOfDisableInGridView ?? true
+  // 菜单显示的方式，改为始终右键点击显示
+  const menuDisplayByRightClick = true
+
+  const containerRef = useRef(null)
+  const menuRef = useRef(null)
+  const tooltipRef = useRef(null)
+  // tooltip 固定定位的坐标
+  const [tooltipStyle, setTooltipStyle] = useState({})
+
+  const checkMenuPosition = () => {
+    const containerRect = containerRef.current.getBoundingClientRect()
+    const menuRect = menuRef.current.getBoundingClientRect()
+    const rightSpace = window.innerWidth - containerRect.right
+
+    if (rightSpace < menuRect.width) {
+      setIsMenuOnRight(false)
+    } else {
+      setIsMenuOnRight(true)
+    }
+  }
+
+  const checkTooltipPosition = () => {
+    if (!tooltipRef.current || !containerRef.current) return
+    const containerRect = containerRef.current.getBoundingClientRect()
+    const tooltipEl = tooltipRef.current
+    // 先临时显示以获取尺寸
+    tooltipEl.style.visibility = "hidden"
+    tooltipEl.style.display = "block"
+    const tooltipRect = tooltipEl.getBoundingClientRect()
+    tooltipEl.style.visibility = ""
+    tooltipEl.style.display = ""
+
+    const margin = 6
+    const arrowSize = 5
+    const style = {}
+
+    // 垂直方向：优先显示在下方，空间不足则显示在上方
+    const bottomSpace = window.innerHeight - containerRect.bottom
+    if (bottomSpace < tooltipRect.height + margin + arrowSize) {
+      style.top = containerRect.top - tooltipRect.height - arrowSize - margin
+      style.arrowVertical = "bottom" // 箭头在 tooltip 下方
+    } else {
+      style.top = containerRect.bottom + arrowSize + margin
+      style.arrowVertical = "top" // 箭头在 tooltip 上方
+    }
+
+    // 水平方向：优先居中，空间不足则偏移
+    const centerX = containerRect.left + containerRect.width / 2
+    let left = centerX - tooltipRect.width / 2
+    if (left < margin) {
+      left = margin
+    } else if (left + tooltipRect.width > window.innerWidth - margin) {
+      left = window.innerWidth - margin - tooltipRect.width
+    }
+    style.left = left
+
+    // 箭头水平位置（相对 tooltip 左边距）
+    style.arrowLeft = Math.max(8, Math.min(centerX - left, tooltipRect.width - 8))
+
+    setTooltipStyle(style)
+  }
+
+  useEffect(() => {
+    checkMenuPosition()
+    checkTooltipPosition()
+  }, [isMouseEnter, isMouseRightClick])
+
+  const handleItemMouseEnter = () => {
+    setIsMouseEnter(true)
+  }
+
+  const handleItemMouseLeave = () => {
+    setTimeout(() => {
+      setIsMouseEnter(false)
+      setIsMouseRightClick(false)
+    }, 60) // 鼠标从 item 移动到 menu 上，需要一点时间
+  }
+
+  const handleMenuMouseEnter = () => {
+    setIsMenuShow(true)
+  }
+
+  const handleMenuMouseLeave = () => {
+    setIsMenuShow(false)
+    setIsMouseRightClick(false)
+  }
+
+  const handleItemMouseClick = (e) => {
+    if (e.button === 2) {
+      setIsMouseRightClick(true)
+    }
+  }
+
+  const handleContextMenu = (e) => {
+    // 在扩展 Item 上，禁用默认的右键菜单，其它地方不禁用
+    e.preventDefault()
+  }
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (el) {
+      el.addEventListener("contextmenu", handleContextMenu)
+      return () => {
+        el.removeEventListener("contextmenu", handleContextMenu)
+      }
+    }
+  }, [])
+
+  /**
+   * 打开扩展设置页面
+   */
+  const handleSettingButtonClick = (e, item) => {
+    if (existOptionPage) {
+      if (!item.enabled) {
+        messageApi.info(getLang("extension_not_enable"))
+        return
+      }
+      chrome.tabs.create({ url: item.optionsUrl })
+    }
+  }
+
+  /**
+   * 打开扩展主页
+   */
+  const handleHomeButtonClick = (e, item) => {
+    const url = getHomepageUrl(item, true)
+    if (url) {
+      chrome.tabs.create({ url })
+    }
+  }
+
+  /**
+   * 打开浏览器自带的扩展设置页面
+   */
+  const handleOriginSettingButtonClick = (e, item) => {
+    const url = getOriginSettingUrl(item)
+    if (url) {
+      chrome.tabs.create({ url })
+    }
+  }
+
+  /**
+   * 删除扩展
+   */
+  const confirmDeleteExtension = (e, item) => {
+    chrome.management.uninstall(item.id)
+    setIsMouseEnter(false)
+  }
+
+  const onItemClick = () => {
+    if (itemEnable) {
+      chrome.management.setEnabled(item.id, false)
+      setItemEnable(false)
+      item.enabled = false
+      onItemMove?.(item, currentMode)
+      messageApi.info(`${getLang("disable_extension")} ${item.name}`)
+    } else {
+      chrome.management.setEnabled(item.id, true)
+      setItemEnable(true)
+      item.enabled = true
+      onItemMove?.(item, currentMode)
+      messageApi.info(`${getLang("enable_extension")} ${item.name}`)
+      manualEnableCounter.count(item.id)
+    }
+  }
+
+  return (
+    <ExtensionGridItemStyle
+      ref={containerRef}
+      onMouseEnter={handleItemMouseEnter}
+      onMouseLeave={handleItemMouseLeave}
+      onMouseUpCapture={handleItemMouseClick}
+      animation_delay={menuDisplayByRightClick ? 0 : 0.3}>
+      {contextHolder}
+      {/* 扩展显示 */}
+      <div
+        className={classNames([
+          "grid-display-item",
+          { "grid-display-item-scale": isMouseEnter || isMenuShow }
+        ])}
+        onClick={onItemClick}>
+        <div
+          className={classNames([
+            "grid-display-item-box",
+            { "grid-item-disable": !itemEnable && grayStyleOfDisable }
+          ])}>
+          <img src={getIcon(item, 128)} alt="icon" />
+          {isShowAppNameInGirdView && (
+            <span
+              className={classNames([
+                "grid-display-item-title",
+                {
+                  "grid-display-item-title-gray": !itemEnable
+                }
+              ])}>
+              {getExtItemDisplayName(item)}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* 名称 tooltip（fixed 定位，脱离层叠上下文） */}
+      <div
+        ref={tooltipRef}
+        className={classNames([
+          "grid-name-tooltip",
+          { "grid-name-tooltip-show": isMouseEnter || isMenuShow }
+        ])}
+        style={
+          tooltipStyle.top !== undefined ? { top: tooltipStyle.top, left: tooltipStyle.left } : {}
+        }>
+        {/* 箭头 */}
+        <span
+          className={classNames([
+            "tooltip-arrow",
+            tooltipStyle.arrowVertical === "bottom" ? "tooltip-arrow-bottom" : "tooltip-arrow-top"
+          ])}
+          style={tooltipStyle.arrowLeft !== undefined ? { left: tooltipStyle.arrowLeft } : {}}
+        />
+        {item.name}
+      </div>
+
+      {/* hover 菜单 */}
+      <div
+        className={classNames([
+          "operation-menu",
+          {
+            "menu-right": isMenuOnRight,
+            "menu-left": !isMenuOnRight,
+            "menu-on": (menuDisplayByRightClick ? isMouseRightClick : isMouseEnter) || isMenuShow,
+            "operation-menu-disable": !itemEnable
+          }
+        ])}
+        onMouseEnter={handleMenuMouseEnter}
+        onMouseLeave={handleMenuMouseLeave}
+        ref={menuRef}>
+        <div className="operation-menu-items">
+          <div
+            className="operation-menu-item"
+            onClick={(e) => handleOriginSettingButtonClick(e, item)}>
+            <ToolOutlined />
+            <span>设置</span>
+          </div>
+          {existOptionPage && (
+            <div className="operation-menu-item" onClick={(e) => handleSettingButtonClick(e, item)}>
+              <SettingOutlined />
+              <span>选项</span>
+            </div>
+          )}
+          {existHomePage && (
+            <div className="operation-menu-item" onClick={(e) => handleHomeButtonClick(e, item)}>
+              <ShopOutlined />
+              <span>商店</span>
+            </div>
+          )}
+          <div className="operation-menu-divider"></div>
+          <div
+            className="operation-menu-item operation-menu-item-danger"
+            onClick={(e) => confirmDeleteExtension(e, item)}>
+            <DeleteOutlined />
+            <span>卸载</span>
+          </div>
+        </div>
+      </div>
+    </ExtensionGridItemStyle>
+  )
+})
+
+export default ExtensionGridItem
+
+function getExtItemDisplayName(item) {
+  try {
+    if (item.__attach__?.alias) {
+      return item.__attach__.alias
+    }
+
+    if (item.name.indexOf("-") > 0) {
+      return item.name.split("-")[0].trim()
+    }
+
+    if (item.name.indexOf(":") > 0) {
+      return item.name.split(":")[0].trim()
+    }
+
+    if (item.name.indexOf("：") > 0) {
+      return item.name.split("：")[0].trim()
+    }
+
+    return item.name.trim()
+  } catch (error) {
+    console.error("Failed to get short name from extension data", item, error)
+    return item.name
+  }
+}

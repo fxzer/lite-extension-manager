@@ -1,0 +1,470 @@
+{
+  "ext_name": {
+    "message": "扩展管理器（Extension Manager）"
+  },
+  "ext_desc": {
+    "message": "一个可以轻量、可分组管理插件的扩展管理工具"
+  },
+  "add": {
+    "message": "添加"
+  },
+  "update": {
+    "message": "更新"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "help": {
+    "message": "帮助"
+  },
+  "delete": {
+    "message": "卸载"
+  },
+  "got_it": {
+    "message": "知道了"
+  },
+  "no_more_prompts": {
+    "message": "不再提示"
+  },
+  "management_export_title": {
+    "message": "导出扩展"
+  },
+  "management_import_title": {
+    "message": "导入扩展"
+  },
+  "confirm_ok": {
+    "message": "确定"
+  },
+  "confirm_cancel": {
+    "message": "取消"
+  },
+  "enable_extension": {
+    "message": "启用"
+  },
+  "disable_extension": {
+    "message": "禁用"
+  },
+  "uninstall_extension": {
+    "message": "卸载"
+  },
+  "uninstall_extension_confirm": {
+    "message": "确认卸载 $1 吗？"
+  },
+  "extension_not_enable": {
+    "message": "扩展未启用"
+  },
+  "app_not_enable": {
+    "message": "未启用"
+  },
+  "about_title": {
+    "message": "关于"
+  },
+  "about_feedback": {
+    "message": "问题反馈"
+  },
+  "about_version": {
+    "message": "版本"
+  },
+  "about_version_update_tip": {
+    "message": "版本过低，建议升级"
+  },
+  "column_index": {
+    "message": "序号"
+  },
+  "column_time": {
+    "message": "时间"
+  },
+  "column_event": {
+    "message": "事件"
+  },
+  "column_name": {
+    "message": "扩展名称"
+  },
+  "column_version": {
+    "message": "版本"
+  },
+  "column_remark": {
+    "message": "备注"
+  },
+  "column_extension": {
+    "message": "扩展名称"
+  },
+  "column_operation": {
+    "message": "操作"
+  },
+  "history_clean_record": {
+    "message": "清空记录"
+  },
+  "history_clean_confirm_title": {
+    "message": "清空历史记录"
+  },
+  "history_clean_confirm_content": {
+    "message": "确定要删除所有历史记录吗？"
+  },
+  "history_solo_ext": {
+    "message": "仅显示此扩展的记录"
+  },
+  "history_hide_ext": {
+    "message": "隐藏此扩展的记录"
+  },
+  "history_hidden_record": {
+    "message": "隐藏的记录"
+  },
+  "extension_settings": {
+    "message": "设置"
+  },
+  "history_title": {
+    "message": "操作记录"
+  },
+  "history_install": {
+    "message": "安装"
+  },
+  "history_uninstall": {
+    "message": "卸载"
+  },
+  "history_update": {
+    "message": "更新"
+  },
+  "history_enable": {
+    "message": "启用"
+  },
+  "history_disable": {
+    "message": "禁用"
+  },
+  "history_browser_update": {
+    "message": "浏览器更新"
+  },
+  "management_show_operation": {
+    "message": "显示操作菜单"
+  },
+  "management_title": {
+    "message": "扩展管理"
+  },
+  "option_title": {
+    "message": "选项"
+  },
+  "setting_import_finish": {
+    "message": "导入完成"
+  },
+  "setting_import_fail": {
+    "message": "导入失败"
+  },
+  "setting_popup_setting_search": {
+    "message": "搜索"
+  },
+  "setting_popup_setting_display": {
+    "message": "显示内容"
+  },
+  "setting_import_config": {
+    "message": "导入配置"
+  },
+  "setting_export_config": {
+    "message": "导出配置"
+  },
+  "setting_restore_default": {
+    "message": "恢复默认"
+  },
+  "setting_restore_default_tip": {
+    "message": "将通用设置重置为默认"
+  },
+  "setting_clear_title": {
+    "message": "清空配置"
+  },
+  "setting_clear_confirm_title": {
+    "message": "删除所有配置"
+  },
+  "setting_clear_confirm_content": {
+    "message": "此操作将删除所有配置数据"
+  },
+  "setting_list_gird_show_name_tip": {
+    "message": "网格视图下,是否显示扩展名称"
+  },
+  "setting_list_gird_show_column_number": {
+    "message": "网格视图下，扩展显示的列数 "
+  },
+  "setting_dark_mode_title": {
+    "message": "主题"
+  },
+  "setting_dark_mode_light": {
+    "message": "浅色"
+  },
+  "setting_dark_mode_dark": {
+    "message": "深色"
+  },
+  "setting_dark_mode_system": {
+    "message": "系统"
+  },
+  "management_import": {
+    "message": "导入"
+  },
+  "management_import_source": {
+    "message": "来源"
+  },
+  "management_import_file_text": {
+    "message": "导入文件/粘贴文本"
+  },
+  "management_import_install_extension": {
+    "message": "安装扩展"
+  },
+  "management_prev_step": {
+    "message": "上一步"
+  },
+  "management_next_step": {
+    "message": "下一步"
+  },
+  "management_import_from_clipboard": {
+    "message": "从剪贴板中粘贴"
+  },
+  "management_import_from_file": {
+    "message": "从文件读取"
+  },
+  "management_open_web_store": {
+    "message": "打开应用商店"
+  },
+  "management_import_prepare": {
+    "message": "准备导入"
+  },
+  "management_import_store_source": {
+    "message": "应用商店源"
+  },
+  "management_import_no_input": {
+    "message": "未输入任何内容"
+  },
+  "management_import_parse_failed": {
+    "message": "无法解析输入内容"
+  },
+  "management_store_official": {
+    "message": "官方应用商店"
+  },
+  "management_export_target": {
+    "message": "目标"
+  },
+  "management_export_content": {
+    "message": "内容"
+  },
+  "management_export_type": {
+    "message": "导出方式"
+  },
+  "management_export_target_desc": {
+    "message": "选择分享/导出的扩展"
+  },
+  "management_export_content_desc": {
+    "message": "选择导出的自定义内容"
+  },
+  "management_export_type_desc": {
+    "message": "设置导出方式"
+  },
+  "management_export_all_extension": {
+    "message": "全部扩展"
+  },
+  "management_export_part_extension": {
+    "message": "部分扩展"
+  },
+  "management_export_no_extension_selected": {
+    "message": "没有选择任何扩展"
+  },
+  "management_export_extension_base_info": {
+    "message": "扩展基础信息"
+  },
+  "management_export_share_text": {
+    "message": "分享文本"
+  },
+  "management_export_download": {
+    "message": "下载"
+  },
+  "management_export_copy_to_clipboard": {
+    "message": "复制到剪贴板"
+  },
+  "management_export_share_text_title": {
+    "message": "给你分享了 $1 个浏览器扩展，复制此文本到扩展管理器中导入"
+  },
+  "management_export_md_template_new": {
+    "message": "新建模板"
+  },
+  "management_export_md_template_default": {
+    "message": "默认模板"
+  },
+  "snapshot_disable_all": {
+    "message": "禁用全部"
+  },
+  "snapshot_enable_all": {
+    "message": "启用全部"
+  },
+  "snapshot_capture": {
+    "message": "保存快照"
+  },
+  "snapshot_restore": {
+    "message": "恢复快照"
+  },
+  "snapshot_rename": {
+    "message": "重命名快照"
+  },
+  "snapshot_delete_all": {
+    "message": "删除全部快照"
+  },
+  "mode_title": {
+    "message": "模式管理"
+  },
+  "mode_new": {
+    "message": "新模式"
+  },
+  "mode_edit": {
+    "message": "编辑模式"
+  },
+  "mode_name_cannot_empty": {
+    "message": "模式名称不能为空"
+  },
+  "mode_name_too_long": {
+    "message": "模式名称不能超过6个字符"
+  },
+  "mode_name": {
+    "message": "模式名称"
+  },
+  "mode_desc": {
+    "message": "模式描述"
+  },
+  "mode_default_name": {
+    "message": "默认"
+  },
+  "mode_minimal_name": {
+    "message": "极简"
+  },
+  "mode_development_name": {
+    "message": "开发"
+  },
+  "mode_include": {
+    "message": "「$1」中启用的扩展"
+  },
+  "mode_not_include": {
+    "message": "未启用的扩展"
+  },
+  "mode_system_cannot_delete": {
+    "message": "内置模式不能被删除"
+  },
+  "mode_delete_title": {
+    "message": "删除模式"
+  },
+  "mode_delete_confirm": {
+    "message": "确认删除模式 \"$1\""
+  },
+  "mode_delete_success": {
+    "message": "已删除 \"$1\""
+  },
+  "mode_may_redundant": {
+    "message": "可能是重复操作"
+  },
+  "mode_may_redundant_desc": {
+    "message": "此扩展已经在默认模式中，切换模式时扩展将始终被激活"
+  },
+  "mode_sort_by_name": {
+    "message": "按名称排序"
+  },
+  "mode_sort_by_install_time": {
+    "message": "按安装时间排序"
+  },
+  "mode_search_placeholder": {
+    "message": "搜索扩展"
+  },
+  "sort_frequency": {
+    "message": "启用频率"
+  },
+  "sort_name": {
+    "message": "扩展名称"
+  },
+  "detail_id": {
+    "message": "ID"
+  },
+  "detail_version": {
+    "message": "版本"
+  },
+  "detail_type": {
+    "message": "类型"
+  },
+  "detail_install_type": {
+    "message": "安装类型"
+  },
+  "detail_install_time": {
+    "message": "安装时间"
+  },
+  "detail_update_time": {
+    "message": "更新时间"
+  },
+  "detail_homepage": {
+    "message": "主页"
+  },
+  "detail_webstore": {
+    "message": "商店"
+  },
+  "detail_description": {
+    "message": "描述"
+  },
+  "detail_unknown": {
+    "message": "未知"
+  },
+  "save_success": {
+    "message": "保存成功"
+  },
+  "save_failed": {
+    "message": "保存失败"
+  },
+  "input_name": {
+    "message": "输入名称"
+  },
+  "search_extension": {
+    "message": "搜索扩展"
+  },
+  "filter_extension": {
+    "message": "筛选扩展"
+  },
+  "mode_description": {
+    "message": "模式中的启用/禁用扩展切换会自动同步到 Popup 弹出层对应的模式插件状态。"
+  },
+  "exclude_other_mode_extensions": {
+    "message": "排除其他模式中的扩展"
+  },
+  "enabled": {
+    "message": "已启用"
+  },
+  "data_save_failed": {
+    "message": "保存配置失败"
+  },
+  "data_save_failed_quota": {
+    "message": "保存配置失败，超过浏览器存储限制"
+  },
+  "history_feature_closed": {
+    "message": "历史记录功能已关闭"
+  },
+  "get_short_name_failed": {
+    "message": "尝试从扩展数据中获取短名称失败"
+  },
+  "google": {
+    "message": "谷歌"
+  },
+  "microsoft": {
+    "message": "微软"
+  },
+  "crxsoso": {
+    "message": "搜搜"
+  },
+  "search_placeholder_local_store": {
+    "message": "Enter 本地搜索，Shift+Enter 商店搜索(右侧可选择搜索源)"
+  },
+  "group_name_too_long": {
+    "message": "分组名称不能超过6个字符"
+  },
+  "record_on": {
+    "message": "开启"
+  },
+  "record_off": {
+    "message": "关闭"
+  },
+  "popup_show_ext_name": {
+    "message": "显示扩展名称"
+  },
+  "popup_hide_ext_name": {
+    "message": "隐藏扩展名称"
+  }
+}

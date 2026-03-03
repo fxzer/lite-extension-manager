@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": true,
+  "cSpell.words": [
+    "antd",
+    "Dexie",
+    "INDEXEDDB",
+    "localforage",
+    "LOCALSTORAGE",
+    "noreferrer",
+    "pangea",
+    "Popconfirm",
+    "wdyr",
+    "webext"
+  ]
+}

@@ -1,0 +1,51 @@
+.option-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  margin: 0 auto;
+  gap: 20px;
+  /* 确保容器不会超出父元素 */
+  overflow: hidden;
+}
+
+@media screen and (min-width: 1280px) {
+  .option-container {
+    width: 1000px;
+  }
+}
+
+.ant-alert-with-description {
+  padding: 6px 10px !important;
+}
+
+.option-content {
+  flex: 1;
+  height: 100%;
+  /* 使用 overflow-y: auto 以免未溢出时强制显示滚动条 */
+  /* 或者使用 scrollbar-gutter: stable 为滚动条预留空间 */
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+
+  /* 优化滚动条样式 */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb, #ccc);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--scrollbar-thumb-hover, #999);
+    }
+  }
+
+  /* Firefox 滚动条样式 */
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb, #ccc) transparent;
+}

@@ -1,0 +1,85 @@
+.list-item-container {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding-left: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.list-item-container img {
+  margin-right: 5px;
+  padding: 1px;
+  width: 24px;
+  height: 24px;
+
+  user-select: none;
+}
+
+.list-item-img-box {
+  position: relative;
+}
+
+/* 禁用扩展的图标灰色效果 */
+.list-item-disable {
+  filter: grayscale(100%) opacity(50%);
+}
+
+.list-item-disable:hover {
+  filter: none;
+}
+
+.list-item-container > .ext-name {
+  flex-grow: 1;
+
+  margin-left: 2px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  user-select: none;
+}
+
+.list-item-container > .ext-name:hover {
+  color: #555;
+}
+
+.list-item-container > .li-operation {
+  white-space: nowrap;
+  margin-left: 3px;
+}
+
+.list-item-container .li-operation {
+  display: flex;
+  align-items: center;
+}
+
+.list-item-container .li-operation .ant-btn {
+  height: 26px;
+  width: 26px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-item-container .switch {
+  margin-right: 2px;
+  position: relative;
+  bottom: 1px;
+}
+
+.list-item-container.not-enable {
+  color: #888888;
+  background-color: var(--divider-color);
+}
+
+.list-item-container.is-enable {
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.list-item-container.item-is-top {
+  color: rgb(25, 103, 210);
+  font-weight: bold;
+}

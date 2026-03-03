@@ -1,0 +1,101 @@
+@import url(../reset.css);
+
+body {
+  width: 420px;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  position: relative;
+  overflow: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/* 统一下拉菜单样式 - 紧凑尺寸 */
+.ant-dropdown {
+  font-size: 12px !important;
+}
+
+.ant-dropdown-menu {
+  border: 1px solid var(--menu-border-color, rgba(0, 0, 0, 0.08)) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px var(--shadow-color, rgba(0, 0, 0, 0.06)) !important;
+  padding: 4px !important;
+}
+
+.ant-dropdown-menu-item {
+  padding: 4px 8px !important;
+  min-height: auto !important;
+  line-height: 1.4 !important;
+  margin-bottom: 2px !important;
+}
+
+.mode-dropdown-overlay .ant-dropdown-menu-item {
+  text-align: center !important;
+}
+
+.ant-dropdown-menu-item:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* 单选菜单项选中状态 - 使用主题色高亮 */
+.ant-dropdown-menu-item-selected {
+  background-color: transparent;
+}
+
+.ant-dropdown-menu-item-selected .ant-dropdown-menu-title-content {
+  color: #1890ff;
+  font-weight: 500;
+}
+
+/* 多选菜单项选中状态 */
+.ant-dropdown-menu-item-selected .ant-checkbox-wrapper span:last-child {
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.ant-dropdown-menu-title-content {
+  display: inline-block;
+  max-width: 120px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* 快照菜单样式 */
+.snapshot-label {
+  flex: 1;
+  cursor: pointer;
+}
+
+.snapshot-action-btn {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.snapshot-action-btn:hover {
+  opacity: 1;
+}
+
+#app-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+#app-container::-webkit-scrollbar {
+  display: none;
+}
+
+html,
+body {
+  height: auto;
+}
