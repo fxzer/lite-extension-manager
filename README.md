@@ -1,4 +1,4 @@
-# Extension Manager
+# Lite Extension Manager
 
 > 一个轻量、支持模式管理的浏览器扩展管理工具
 
