@@ -32,7 +32,8 @@ const Style = styled.div`
 
   .right .ant-space {
     &:hover {
-      color: ${(props) => props.theme.disabled};
+      color: ${(props) => props.theme.primary};
+      cursor: pointer;
     }
   }
 
@@ -63,7 +64,8 @@ const Style = styled.div`
   .setting-icon {
     font-size: 20px;
     &:hover {
-      color: ${(props) => props.theme.disabled};
+      color: ${(props) => props.theme.primary};
+      cursor: pointer;
     }
   }
 
@@ -126,6 +128,11 @@ const SearchStyle = styled.div`
 `
 
 export const ZoomDropdownGlobalStyle = createGlobalStyle`
+  .ant-message {
+    top: auto !important;
+    bottom: 8px;
+  }
+
   .more-op-dropdown-overlay {
     .ant-dropdown-menu-submenu-title {
       font-size: 14px;

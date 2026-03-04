@@ -1,7 +1,12 @@
 import { memo, useCallback, useEffect, useState } from "react"
 
+import chromeP from "webext-polyfill-kinda"
+
+import { LocalOptions } from ".../storage/local"
 import { storage } from ".../storage/sync"
 import { appendAdditionInfo, isAppExtension } from ".../utils/extensionHelper"
+
+const localOptions = new LocalOptions()
 
 /**
  * 根据数据，计算出在当前模式中的扩展和不在当前模式中的扩展
@@ -79,12 +84,14 @@ const useModeItems = (selectedMode, modeListInfo, extensions, hiddenQuickFilter)
       setRawEnabledExts(enabled)
       setRawDisabledExts(disabled)
       save(enabled, mode)
+      applyToActiveMode(item.id, mode.id, false)
     } else if (action === "add") {
       const disabled = rawDisabledExts.filter((ext) => ext.id !== item.id)
       const enabled = [...rawEnabledExts, item]
       setRawEnabledExts(enabled)
       setRawDisabledExts(disabled)
       save(enabled, mode)
+      applyToActiveMode(item.id, mode.id, true)
     }
   }
 
@@ -92,6 +99,24 @@ const useModeItems = (selectedMode, modeListInfo, extensions, hiddenQuickFilter)
 }
 
 export default useModeItems
+
+/**
+ * 如果被编辑的模式正好是 Popup 当前激活的模式，立即通过 Chrome API 应用变更，
+ * 这样用户不需要打开 Popup 就能让扩展启用/禁用立即生效。
+ */
+async function applyToActiveMode(extensionId, modeId, enabled) {
+  try {
+    const activeModeId = await localOptions.getActiveModeId()
+    if (activeModeId !== modeId) return
+
+    const allOptions = await storage.options.getAll()
+    if (!(allOptions.setting?.isRaiseEnableWhenSwitchGroup ?? true)) return
+
+    await chromeP.management.setEnabled(extensionId, enabled)
+  } catch (error) {
+    console.error("[useModeItems] Failed to apply to active mode:", error)
+  }
+}
 
 /**
  * 计算在当前模式内和在模式外的扩展

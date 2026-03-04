@@ -13,7 +13,7 @@ export const ExtensionManageStyle = styled.div`
     align-items: baseline;
 
     .search {
-      width: 300px;
+      width: 400px;
       margin-right: 10px;
     }
 
@@ -35,6 +35,8 @@ export const ExtensionManageStyle = styled.div`
 
   .ant-table-wrapper {
     margin-right: 5px;
+    border: 1px solid ${(props) => props.theme.border};
+    border-radius: 6px;
   }
 
   .column-index {

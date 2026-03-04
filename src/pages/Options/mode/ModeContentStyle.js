@@ -11,12 +11,90 @@ export const ModeContentStyle = styled.div`
   .search-sort-bar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     margin-bottom: 10px;
   }
 
   .search {
-    width: 300px;
+    max-width: 400px;
+    flex: 1;
+  }
+
+  .shortcut-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    width: 150px;
+    border: 1px solid ${(props) => props.theme.border};
+    border-radius: 6px;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    user-select: none;
+
+    &:hover {
+      border-color: ${(props) => props.theme.primary};
+    }
+
+    &:focus {
+      outline: none;
+      border-color: ${(props) => props.theme.primary};
+      box-shadow: 0 0 0 2px ${(props) => props.theme.primary}33;
+    }
+
+    &.recording {
+      border-color: ${(props) => props.theme.primary};
+      box-shadow: 0 0 0 2px ${(props) => props.theme.primary}33;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 2px ${(props) => props.theme.primary}33;
+      }
+      50% {
+        box-shadow: 0 0 0 3px ${(props) => props.theme.primary}22;
+      }
+    }
+
+    .shortcut-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+
+      path {
+        fill: ${(props) => props.theme.subtle};
+      }
+    }
+
+    .shortcut-text {
+      font-family: monospace;
+      font-size: 13px;
+      color: ${(props) => props.theme.fg};
+      min-width: 60px;
+    }
+
+    .shortcut-clear {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      font-size: 14px;
+      line-height: 1;
+      color: ${(props) => props.theme.subtle};
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: ${(props) => props.theme.danger};
+      }
+    }
   }
 
   .setting-item {
@@ -73,4 +151,5 @@ export const ModeContentStyle = styled.div`
     color: ${(props) => props.theme.fg};
     border-bottom: 1px solid ${(props) => props.theme.border};
   }
+}
 `

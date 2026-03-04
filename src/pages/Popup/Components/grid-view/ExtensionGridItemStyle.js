@@ -51,7 +51,6 @@ export const ExtensionGridItemStyle = styled.div`
     pointer-events: none;
     user-select: none;
 
-    box-shadow: ${(props) => props.theme.shadowTooltip};
   }
 
   .grid-name-tooltip-show {

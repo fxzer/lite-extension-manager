@@ -12,7 +12,7 @@ import {
   SettingOutlined,
   UnorderedListOutlined
 } from "@ant-design/icons"
-import { Space, message } from "antd"
+import { Input, Space, message } from "antd"
 import _ from "lodash"
 
 import DarkIcon from ".../assets/Dark.svg"
@@ -106,10 +106,6 @@ const Header = memo((props) => {
     const setting = { ...allOptions.setting, darkMode: newTheme }
     await storage.options.set({ setting: setting })
 
-    const newIsDarkMode =
-      newTheme === "dark" ||
-      (newTheme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-
     window.location.reload()
   }
 
@@ -122,19 +118,8 @@ const Header = memo((props) => {
     switch (nextMode) {
       case "light":
         return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 32 32"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{ verticalAlign: "middle", marginBottom: "2px" }}>
-            <path d="M15 2h2v5h-2zm6.688 6.9l3.506-3.506l1.414 1.414l-3.506 3.506zM25 15h5v2h-5zm-3.312 8.1l1.414-1.413l3.506 3.506l-1.414 1.414zM15 25h2v5h-2zm-9.606.192L8.9 21.686l1.414 1.414l-3.505 3.506zM2 15h5v2H2zm3.395-8.192l1.414-1.414L10.315 8.9L8.9 10.314zM16 12a4 4 0 1 1-4 4a4.005 4.005 0 0 1 4-4m0-2a6 6 0 1 0 6 6a6 6 0 0 0-6-6" />
-          </svg>
+          <svg width="20"
+            height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="currentColor" fillRule="evenodd" d="M8 3a.75.75 0 0 1-.75-.75V.75a.75.75 0 0 1 1.5 0v1.5A.75.75 0 0 1 8 3m0 7.5a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5M8 12a4 4 0 1 0 0-8a4 4 0 0 0 0 8m-.75 3.25a.75.75 0 0 0 1.5 0v-1.5a.75.75 0 0 0-1.5 0zM13 8a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 13 8M.75 7.25a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zm10.786-2.786a.75.75 0 0 1 0-1.06l1.06-1.06a.75.75 0 0 1 1.06 1.06l-1.06 1.06a.75.75 0 0 1-1.06 0m-9.193 8.132a.75.75 0 0 0 1.06 1.06l1.062-1.06a.75.75 0 0 0-1.061-1.06zm9.193-1.06a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 0 1-1.06 1.06l-1.06-1.06a.75.75 0 0 1 0-1.06M3.404 2.343a.75.75 0 0 0-1.06 1.06l1.06 1.061a.75.75 0 1 0 1.06-1.06z" clipRule="evenodd" /></svg>
         )
       case "dark":
         return <MoonOutlined />
@@ -268,8 +253,8 @@ const Header = memo((props) => {
       {isShowSearch && (
         <SearchStyle>
           <div className="search-input-wrapper">
-            <input
-              type="text"
+            <Input
+              size="small"
               placeholder={getLang("search_placeholder_local_store")}
               value={searchText}
               onChange={(e) => onSearchTextChange(e)}
@@ -284,8 +269,10 @@ const Header = memo((props) => {
                   }
                 }
               }}
-              ref={searchInputRef}></input>
-            {searchText && <CloseOutlined className="clear-icon" onClick={onSearchClear} />}
+              ref={searchInputRef}
+              allowClear
+              onClear={onSearchClear}
+            />
           </div>
           <SearchSourceDropdown />
         </SearchStyle>

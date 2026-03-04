@@ -2,15 +2,14 @@
  * 主题系统入口
  * 统一的主题管理，支持浅色和深色模式
  */
-// 导出主题对象
-import lightTheme from "./lightTheme"
-import darkTheme from "./darkTheme"
-// 导出颜色常量（供需要直接使用颜色的场景）
-export * from "./colors"
+import { lightTheme, darkTheme } from "./themes"
 
+export { lightTheme, darkTheme }
 
+// 常用颜色常量（供需要直接使用的场景）
+export const PRIMARY = lightTheme.primary
 
-// 导出主题常量
+// 主题常量
 export const THEMES = {
   LIGHT: "light",
   DARK: "dark",
@@ -41,4 +40,5 @@ export function getThemeByMode(isDark) {
 }
 
 // 默认导出
-export default { light: lightTheme, dark: darkTheme }
+const themeExport = { light: lightTheme, dark: darkTheme }
+export default themeExport

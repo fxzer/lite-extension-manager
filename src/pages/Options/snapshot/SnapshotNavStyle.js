@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const GroupNavStyle = styled.div`
+export const SnapshotNavStyle = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
@@ -31,14 +31,22 @@ export const GroupNavStyle = styled.div`
 
       &:hover {
         background: ${(props) =>
-          props.theme.isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)"};
+    props.theme.isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)"};
       }
     }
+  }
+
+  .empty-state {
+    padding: 20px;
+    text-align: center;
+    color: ${(props) => props.theme.subtle};
+    font-size: 14px;
   }
 
   .item-container {
     flex-shrink: 0;
     position: relative;
+    cursor: pointer !important;
   }
 
   .tab-container {
@@ -51,14 +59,14 @@ export const GroupNavStyle = styled.div`
     padding: 0 14px;
 
     border-radius: 6px;
-    background-color: ${(props) => props.theme.hoverBg};
+    background-color: ${(props) => props.theme.hoverBgMedium};
     transition: all 0.2s ease;
 
     user-select: none;
     cursor: pointer;
 
     &:hover {
-      background-color: ${(props) => props.theme.hoverBgMedium};
+      background-color: ${(props) => props.theme.hoverBgStrong};
 
       .delete-confirm {
         opacity: 1;
@@ -87,7 +95,7 @@ export const GroupNavStyle = styled.div`
     .edit-input {
       width: auto;
       min-width: 40px;
-      max-width: 60px;
+      max-width: 120px;
       border: none;
       background: transparent;
       font-size: 14px;
@@ -127,31 +135,14 @@ export const GroupNavStyle = styled.div`
     }
   }
 
-  .selected-group-item {
+  .selected-snapshot-item {
     background-color: ${(props) => props.theme.selectedBg};
-
     &:hover {
       background-color: ${(props) => props.theme.selectedHoverBg};
     }
 
     h3 {
       color: ${(props) => props.theme.selectedFg};
-      font-weight: 600;
-    }
-  }
-
-  .add-new-group {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    padding: 0px;
-    color: ${(props) => props.theme.primary};
-    font-size: 16px;
-    justify-content: center;
-
-    &:hover {
-      border-color: ${(props) => props.theme.primary};
-      background-color: ${(props) => props.theme.selectedBg};
     }
   }
 `

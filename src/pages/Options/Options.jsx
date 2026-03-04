@@ -19,6 +19,7 @@ import ExtensionImport from "./management/import/ExtensionImport"
 import ExtensionShare from "./management/share/ExtensionShare"
 import ModeManagement from "./mode/IndexMode.jsx"
 import Navigation from "./navigation/Navigation.jsx"
+import SnapshotManagement from "./snapshot/IndexSnapshot.jsx"
 
 function Options() {
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -99,6 +100,7 @@ function Options() {
               <Route path="/" element={<Navigate to="/about" replace />}></Route>
               <Route path="/about" element={<About />} />
               <Route path="/mode" element={<ModeManagement />} />
+              <Route path="/snapshot" element={<SnapshotManagement />} />
               <Route path="/management" element={<ExtensionManageIndex />}>
                 <Route index element={<ExtensionManageTable />} />
               </Route>

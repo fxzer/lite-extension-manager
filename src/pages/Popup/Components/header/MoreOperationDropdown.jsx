@@ -58,7 +58,7 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
   // 删除所有快照
   const deleteAllSnapshot = async () => {
     forage.clear()
-    messageApi.info(`delete all snapshot`)
+    messageApi.info(getLang("snapshot_delete_all_success"))
     updateView()
   }
 
@@ -88,7 +88,7 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
    * - 新方案：1 次 getAll() + M 次 setEnabled()（M = 已安装扩展数）
    */
   async function resumeSnapshot(snapshot) {
-    messageApi.info(`resume snapshot ${snapshot.key}`)
+    messageApi.info(getLang("snapshot_resume_success", snapshot.name || snapshot.key))
 
     // ✅ 优化：预先批量获取已安装扩展列表（1 次 API 调用）
     const installedExtensions = await chrome.management.getAll()
@@ -124,7 +124,7 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
   }
 
   function deleteSnapshot(snapshot) {
-    messageApi.info(`delete snapshot ${snapshot.key}`)
+    messageApi.info(getLang("snapshot_delete_success", snapshot.name || snapshot.key))
     forage.removeItem(snapshot.key)
     updateView()
   }
@@ -137,7 +137,7 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
     if (newName !== null && newName.trim() !== "") {
       snapshot.name = newName.trim()
       forage.setItem(snapshot.key, snapshot)
-      messageApi.info(`rename snapshot to ${newName.trim()}`)
+      messageApi.info(getLang("snapshot_rename_success", newName.trim()))
       updateView()
     }
   }
@@ -148,7 +148,7 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
 
   const readSnapshot = async () => {
     const allSnapshotKeys = await forage.keys()
-    const snapshots = [...initSnapshotMenu]
+    const snapshotItems = []
     for (const key of allSnapshotKeys) {
       const snapshot = await forage.getItem(key)
       const resumeOne = () => {
@@ -161,7 +161,7 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
         renameSnapshot(snapshot)
       }
 
-      snapshots.unshift({
+      snapshotItems.push({
         key: key,
         label: (
           <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -178,7 +178,8 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
         )
       })
     }
-    setSnapshotMenuList(snapshots)
+    snapshotItems.sort((a, b) => (Number(a.key) || 0) - (Number(b.key) || 0))
+    setSnapshotMenuList([...snapshotItems, ...initSnapshotMenu])
   }
 
   // 检查是否还有已启用的扩展
@@ -257,20 +258,43 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
       if (ext.type !== "extension") {
         continue
       }
+
+      // 获取图标 URL
+      let iconUrl = null
+      if (ext.icons && ext.icons.length > 0) {
+        const largestIcon = ext.icons.reduce((prev, current) =>
+          current.size > prev.size ? current : prev
+        )
+        iconUrl = largestIcon.url
+      }
+
+      // 获取商店 URL
+      const webStoreUrl = ext.webStoreUrl || `https://chrome.google.com/webstore/detail/${ext.id}`
+
       extSnapshotStats.push({
         id: ext.id,
-        enabled: ext.enabled
+        enabled: ext.enabled,
+        name: ext.name,
+        iconUrl: iconUrl,
+        homepageUrl: ext.homepageUrl || null,
+        webStoreUrl: webStoreUrl
       })
     }
 
     if (extSnapshotStats.length < 1) {
-      messageApi.info("no any extensions")
+      messageApi.info(getLang("snapshot_no_extensions"))
       return
     }
 
-    const snapshotKey = dayjs().format("MMDD.HHmmss")
-    forage.setItem(snapshotKey, { key: snapshotKey, name: snapshotKey, states: extSnapshotStats })
-    messageApi.info(`snapshot save success. ${snapshotKey}`)
+    const now = Date.now()
+    const snapshotKey = now
+    const snapshotName = dayjs(now).format("MMDD-HHmm")
+    forage.setItem(snapshotKey, {
+      key: snapshotKey,
+      name: snapshotName,
+      states: extSnapshotStats
+    })
+    messageApi.info(getLang("snapshot_save_success", snapshotName))
 
     updateView()
   }

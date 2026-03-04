@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react"
 
-import { GithubOutlined, HeartOutlined, StarOutlined } from "@ant-design/icons"
-import { Alert, Button, Space, Tag } from "antd"
+import { GithubOutlined, } from "@ant-design/icons"
+import { Button, } from "antd"
 import newGithubIssueUrl from "new-github-issue-url"
 import { useTheme } from "styled-components"
 
 import DarkIcon from ".../assets/Dark.svg"
 import LightIcon from ".../assets/Light.svg"
-import { closeAlertTemp, compareVersion } from ".../pages/Options/utils/LatestVersionChecker.js"
 import { storage } from ".../storage/sync"
-import { isEdgePackage } from ".../utils/channelHelper.js"
 import { getLang } from ".../utils/utils"
 import Title from "../Title.jsx"
 import { AboutStyle } from "./AboutStyle"
@@ -19,7 +17,6 @@ function About() {
   const isDarkMode = theme.bg === "#242529"
 
   const [version, setVersion] = useState("UNKNOWN")
-  const [latestVersion, setLatestVersion] = useState("")
   const [storageMessage, setStorageMessage] = useState("")
 
   useEffect(() => {
@@ -35,16 +32,6 @@ function About() {
     })
   }, [])
 
-  useEffect(() => {
-    compareVersion(version).then((result) => {
-      if (!result) {
-        return
-      }
-      if (result.needUpdate) {
-        setLatestVersion(result.latestVersion)
-      }
-    })
-  }, [version])
 
   const openIssue = () => {
     const url = newGithubIssueUrl({
@@ -66,15 +53,6 @@ ${navigator.userAgent}`
     })
   }
 
-  const openUpgradeHelpPage = () => {
-    chrome.tabs.create({
-      url: "https://github.com/fxzer/lite-extension-manager.git/wiki/Extension-Upgrade-Help"
-    })
-  }
-
-  const onUpgradeAlertClose = () => {
-    closeAlertTemp()
-  }
 
   return (
     <AboutStyle>
@@ -92,22 +70,6 @@ ${navigator.userAgent}`
         <Button icon={<GithubOutlined />} onClick={openGithub}>
           Github
         </Button>
-        {latestVersion && (
-          <div className="version-update">
-            <Alert
-              message={getLang("about_version_update_tip")}
-              type="warning"
-              showIcon
-              closable
-              onClose={onUpgradeAlertClose}
-              action={
-                <Button size="small" type="text" onClick={openUpgradeHelpPage}>
-                  Upgrade
-                </Button>
-              }
-            />
-          </div>
-        )}
       </div>
       <div className="version">
         {getLang("about_version")} {version}

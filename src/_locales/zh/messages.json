@@ -305,6 +305,24 @@
   "snapshot_delete_all": {
     "message": "删除全部快照"
   },
+  "snapshot_save_success": {
+    "message": "快照已保存：$1"
+  },
+  "snapshot_resume_success": {
+    "message": "正在恢复快照：$1"
+  },
+  "snapshot_delete_success": {
+    "message": "快照已删除：$1"
+  },
+  "snapshot_delete_all_success": {
+    "message": "已删除全部快照"
+  },
+  "snapshot_rename_success": {
+    "message": "快照已重命名为：$1"
+  },
+  "snapshot_no_extensions": {
+    "message": "没有任何扩展"
+  },
   "mode_title": {
     "message": "模式管理"
   },
@@ -420,7 +438,31 @@
     "message": "筛选扩展"
   },
   "mode_description": {
-    "message": "模式中的启用/禁用扩展切换会自动同步到 Popup 弹出层对应的模式插件状态。"
+    "message": "模式中的启用/禁用扩展切换会自动同步到 Popup 弹出层对应的模式插件状态。可绑定快捷键快速切换模式。"
+  },
+  "mode_shortcut_title": {
+    "message": "快捷键"
+  },
+  "mode_shortcut_hint": {
+    "message": "按 Option+数字 快速切换模式"
+  },
+  "mode_shortcut_binding": {
+    "message": "快捷键绑定"
+  },
+  "mode_shortcut_empty": {
+    "message": "未设置"
+  },
+  "mode_shortcut_press_key": {
+    "message": "按下快捷键..."
+  },
+  "mode_switched_shortcut": {
+    "message": "已切换到模式：$1"
+  },
+  "mode_shortcut_instruction": {
+    "message": "点击后按下键盘组合键（如 Option+1）"
+  },
+  "mode_shortcut_conflict": {
+    "message": "快捷键 $2 已被模式「$1」占用"
   },
   "exclude_other_mode_extensions": {
     "message": "排除其他模式中的扩展"
@@ -466,5 +508,65 @@
   },
   "popup_hide_ext_name": {
     "message": "隐藏扩展名称"
+  },
+  "snapshot_title": {
+    "message": "快照管理"
+  },
+  "snapshot_description": {
+    "message": "快照保存当前所有扩展的启用/禁用状态。恢复快照时会跳过已卸载的扩展。"
+  },
+  "snapshot_empty_state": {
+    "message": "暂无快照，请在弹出窗口中保存快照"
+  },
+  "snapshot_delete_title": {
+    "message": "删除快照"
+  },
+  "snapshot_delete_confirm": {
+    "message": "确认删除快照 \"$1\""
+  },
+  "snapshot_name_cannot_empty": {
+    "message": "快照名称不能为空"
+  },
+  "snapshot_created_at": {
+    "message": "创建时间"
+  },
+  "snapshot_total_extensions": {
+    "message": "总扩展"
+  },
+  "snapshot_installed_count": {
+    "message": "已安装"
+  },
+  "snapshot_uninstalled_count": {
+    "message": "已卸载"
+  },
+  "snapshot_installed": {
+    "message": "未卸载扩展"
+  },
+  "snapshot_uninstalled": {
+    "message": "已卸载扩展"
+  },
+  "snapshot_no_installed": {
+    "message": "该快照中没有已安装的扩展"
+  },
+  "snapshot_uninstalled_extension": {
+    "message": "已卸载的扩展"
+  },
+  "snapshot_click_to_install": {
+    "message": "点击重新安装"
+  },
+  "snapshot_restore_button": {
+    "message": "恢复快照"
+  },
+  "snapshot_restore_complete": {
+    "message": "恢复完成"
+  },
+  "snapshot_restored_count": {
+    "message": "已恢复 $1 个扩展"
+  },
+  "snapshot_skipped_count": {
+    "message": "跳过 $1 个已卸载"
+  },
+  "snapshot_failed_count": {
+    "message": "$1 个失败"
   }
 }

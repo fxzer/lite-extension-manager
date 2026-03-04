@@ -23,25 +23,23 @@ export const NavigationStyle = styled.div`
   }
 
   .nav-item {
-    display: block;
+    display: flex;
+    justify-content: center;
     height: 36px;
-
     margin-bottom: 6px;
-    padding-left: 10px;
-
     font-size: 14px;
     line-height: 36px;
     color: ${(props) => props.theme.fg};
-
-    border-radius: 4px;
+    border-radius: 18px;
+    text-align: center;
 
     &:hover {
       background-color: ${(props) => props.theme.navHoverBg};
     }
 
     &.active {
-      background-color: ${(props) => props.theme.primary};
-      color: ${(props) => props.theme.bg};
+      background-color: ${(props) => props.theme.selectedBg};
+      color: ${(props) => props.theme.selectedFg};
     }
 
     & > .anticon {

@@ -293,6 +293,24 @@
   "snapshot_delete_all": {
     "message": "Delete All Snapshots"
   },
+  "snapshot_save_success": {
+    "message": "Snapshot saved: $1"
+  },
+  "snapshot_resume_success": {
+    "message": "Restoring snapshot: $1"
+  },
+  "snapshot_delete_success": {
+    "message": "Snapshot deleted: $1"
+  },
+  "snapshot_delete_all_success": {
+    "message": "All snapshots deleted"
+  },
+  "snapshot_rename_success": {
+    "message": "Snapshot renamed to: $1"
+  },
+  "snapshot_no_extensions": {
+    "message": "No extensions found"
+  },
   "mode_title": {
     "message": "Focus Modes"
   },
@@ -408,7 +426,31 @@
     "message": "Filter Extensions"
   },
   "mode_description": {
-    "message": "Enabling/disabling extensions in the mode will automatically sync to the corresponding mode plugin status in the Popup."
+    "message": "Enabling/disabling extensions in the mode will automatically sync to the corresponding mode plugin status in the Popup. You can bind shortcut keys to quickly switch modes."
+  },
+  "mode_shortcut_title": {
+    "message": "Shortcuts"
+  },
+  "mode_shortcut_hint": {
+    "message": "Press Option+Number to quickly switch modes"
+  },
+  "mode_shortcut_binding": {
+    "message": "Shortcut Binding"
+  },
+  "mode_shortcut_empty": {
+    "message": "Not set"
+  },
+  "mode_shortcut_press_key": {
+    "message": "Press shortcut keys..."
+  },
+  "mode_switched_shortcut": {
+    "message": "Switched to mode: $1"
+  },
+  "mode_shortcut_instruction": {
+    "message": "Click and press keyboard combination (e.g., Option+1)"
+  },
+  "mode_shortcut_conflict": {
+    "message": "Shortcut $2 is already bound to mode \"$1\""
   },
   "exclude_other_mode_extensions": {
     "message": "Exclude extensions from other modes"
@@ -454,5 +496,65 @@
   },
   "popup_hide_ext_name": {
     "message": "Hide Extension Name"
+  },
+  "snapshot_title": {
+    "message": "Snapshots"
+  },
+  "snapshot_description": {
+    "message": "Snapshots save the enabled/disabled state of all current extensions. Uninstalled extensions will be skipped when restoring."
+  },
+  "snapshot_empty_state": {
+    "message": "No snapshots yet, capture one from the popup window"
+  },
+  "snapshot_delete_title": {
+    "message": "Delete Snapshot"
+  },
+  "snapshot_delete_confirm": {
+    "message": "Delete snapshot \"$1\"?"
+  },
+  "snapshot_name_cannot_empty": {
+    "message": "Snapshot name cannot be empty"
+  },
+  "snapshot_created_at": {
+    "message": "Created"
+  },
+  "snapshot_total_extensions": {
+    "message": "Total"
+  },
+  "snapshot_installed_count": {
+    "message": "Installed"
+  },
+  "snapshot_uninstalled_count": {
+    "message": "Uninstalled"
+  },
+  "snapshot_installed": {
+    "message": "Available Extensions"
+  },
+  "snapshot_uninstalled": {
+    "message": "Uninstalled Extensions"
+  },
+  "snapshot_no_installed": {
+    "message": "No installed extensions in this snapshot"
+  },
+  "snapshot_uninstalled_extension": {
+    "message": "Uninstalled Extension"
+  },
+  "snapshot_click_to_install": {
+    "message": "Click to reinstall"
+  },
+  "snapshot_restore_button": {
+    "message": "Restore Snapshot"
+  },
+  "snapshot_restore_complete": {
+    "message": "Restore Complete"
+  },
+  "snapshot_restored_count": {
+    "message": "Restored $1 extensions"
+  },
+  "snapshot_skipped_count": {
+    "message": "Skipped $1 uninstalled"
+  },
+  "snapshot_failed_count": {
+    "message": "$1 failed"
   }
 }
