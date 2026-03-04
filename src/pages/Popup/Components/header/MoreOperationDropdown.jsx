@@ -28,6 +28,13 @@ const ZOOM_MIN = 50
 const ZOOM_MAX = 100
 const ZOOM_STEP = 5
 
+/**
+ * 时间切片工具函数：让出主线程，允许浏览器 UI 渲染
+ * @param {number} ms 延迟毫秒数，默认 25ms（约 40fps）
+ * @returns {Promise<void>}
+ */
+const yieldToMain = (ms = 25) => new Promise((resolve) => setTimeout(resolve, ms))
+
 const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
   const [hasEnabledExtensions, setHasEnabledExtensions] = useState(true)
   const [refreshKey, setRefreshKey] = useState(0)
@@ -66,21 +73,57 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
 
   const [snapshotMenuList, setSnapshotMenuList] = useState(initSnapshotMenu)
 
+  /**
+   * 恢复快照（智能跳过策略 + 性能优化版本）
+   *
+   * 优化策略：
+   * 1. 预先获取已安装扩展列表（1 次 API 调用）
+   * 2. 用 Set.has() 预检查扩展是否存在（O(1) 查找）
+   * 3. 跳过已卸载的扩展，不调用 setEnabled()（避免浪费 API 调用）
+   * 4. 时间切片：每次操作后让出主线程
+   * 5. 错误处理：捕获单个扩展失败不影响整体
+   *
+   * 性能对比：
+   * - 旧方案：N 次 setEnabled() 调用，包括已卸载的扩展
+   * - 新方案：1 次 getAll() + M 次 setEnabled()（M = 已安装扩展数）
+   */
   async function resumeSnapshot(snapshot) {
-    console.log(`resumeSnapshot ${snapshot.key}`)
     messageApi.info(`resume snapshot ${snapshot.key}`)
+
+    // ✅ 优化：预先批量获取已安装扩展列表（1 次 API 调用）
+    const installedExtensions = await chrome.management.getAll()
+    const installedIds = new Set(installedExtensions.map((ext) => ext.id))
+
+    // 统计信息
+    let skippedCount = 0
+    let restoredCount = 0
+    let failedCount = 0
+
     for (const extState of snapshot.states) {
+      // ✅ 优化：预检查扩展是否存在（O(1) 查找）
+      if (!installedIds.has(extState.id)) {
+        skippedCount++
+        continue
+      }
+
+      // 只处理已安装的扩展
       try {
         await chrome.management.setEnabled(extState.id, extState.enabled)
+        // ✅ 时间切片：让浏览器 UI 保持响应
+        await yieldToMain()
+        restoredCount++
       } catch (ex) {
-        console.warn(`[resume snapshot] ${extState.id}`, ex)
+        console.warn(`[快照恢复] ${extState.id} 恢复失败`, ex)
+        failedCount++
       }
     }
+
+    // ✅ 输出恢复统计
+
     updateView()
   }
 
   function deleteSnapshot(snapshot) {
-    console.log(`deleteSnapshot ${snapshot.key}`)
     messageApi.info(`delete snapshot ${snapshot.key}`)
     forage.removeItem(snapshot.key)
     updateView()
@@ -149,7 +192,13 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
     setHasEnabledExtensions(anyEnabled)
   }
 
-  // 禁用全部扩展（除了自己）
+  /**
+   * 禁用全部扩展（除了自己）- 性能优化版本
+   * 优化策略：
+   * - 时间切片：每次操作后让出主线程
+   * - 正确的 async/await：等待每次操作完成
+   * - 错误处理：捕获单个扩展失败不影响整体
+   */
   const disableAllExtension = async () => {
     const allExtensions = await chrome.management.getAll()
     const self = await chrome.management.getSelf()
@@ -158,13 +207,24 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
     for (const ext of allExtensions) {
       if (ext.id === selfId) continue
       if (ext.type !== "extension" || ext.enabled === false) continue
-      chrome.management.setEnabled(ext.id, false)
+      try {
+        await chrome.management.setEnabled(ext.id, false)
+        // ✅ 时间切片：让浏览器 UI 保持响应
+        await yieldToMain()
+      } catch (error) {
+        console.warn(`[disable all] failed for ${ext.id}`, error)
+      }
     }
-    console.log("[Popup Menu] disable all extension")
     setHasEnabledExtensions(false)
   }
 
-  // 启用全部扩展（除了自己）
+  /**
+   * 启用全部扩展（除了自己）- 性能优化版本
+   * 优化策略：
+   * - 时间切片：每次操作后让出主线程
+   * - 正确的 async/await：等待每次操作完成
+   * - 错误处理：捕获单个扩展失败不影响整体
+   */
   const enableAllExtension = async () => {
     const allExtensions = await chrome.management.getAll()
     const self = await chrome.management.getSelf()
@@ -173,9 +233,14 @@ const MoreOperationDropdown = memo(({ options, className, messageApi }) => {
     for (const ext of allExtensions) {
       if (ext.id === selfId) continue
       if (ext.type !== "extension" || ext.enabled === true) continue
-      chrome.management.setEnabled(ext.id, true)
+      try {
+        await chrome.management.setEnabled(ext.id, true)
+        // ✅ 时间切片：让浏览器 UI 保持响应
+        await yieldToMain()
+      } catch (error) {
+        console.warn(`[enable all] failed for ${ext.id}`, error)
+      }
     }
-    console.log("[Popup Menu] enable all extension")
     setHasEnabledExtensions(true)
   }
 

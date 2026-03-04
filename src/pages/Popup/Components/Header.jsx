@@ -114,13 +114,53 @@ const Header = memo((props) => {
   }
 
   const getThemeIcon = () => {
-    switch (themeMode) {
+    // 显示点击后将要切换到的模式
+    const modes = ["light", "dark", "system"]
+    const currentIndex = modes.indexOf(themeMode)
+    const nextMode = modes[(currentIndex + 1) % modes.length]
+
+    switch (nextMode) {
       case "light":
-        return <BulbOutlined />
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ verticalAlign: "middle", marginBottom: "2px" }}>
+            <path d="M15 2h2v5h-2zm6.688 6.9l3.506-3.506l1.414 1.414l-3.506 3.506zM25 15h5v2h-5zm-3.312 8.1l1.414-1.413l3.506 3.506l-1.414 1.414zM15 25h2v5h-2zm-9.606.192L8.9 21.686l1.414 1.414l-3.505 3.506zM2 15h5v2H2zm3.395-8.192l1.414-1.414L10.315 8.9L8.9 10.314zM16 12a4 4 0 1 1-4 4a4.005 4.005 0 0 1 4-4m0-2a6 6 0 1 0 6 6a6 6 0 0 0-6-6" />
+          </svg>
+        )
       case "dark":
         return <MoonOutlined />
       case "system":
-        return <DesktopOutlined />
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 48 48"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ verticalAlign: "middle", marginBottom: "2px" }}>
+            <path
+              d="M22 6H9a3 3 0 0 0-3 3v22a3 3 0 0 0 3 3h30a3 3 0 0 0 3-3v-9M24 34v8m-10 0h20"
+              fill="none"
+            />
+            <path
+              d="M33.3 6C31.478 6 30 7.435 30 9.205c0 3.204 3.9 6.117 6 6.795c2.1-.678 6-3.59 6-6.795C42 7.435 40.523 6 38.7 6A3.33 3.33 0 0 0 36 7.362A3.33 3.33 0 0 0 33.3 6"
+              fill="currentColor"
+            />
+          </svg>
+        )
       default:
         return <DesktopOutlined />
     }

@@ -51,12 +51,6 @@ const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivi
 
     // 如果有当前模式，同步更新模式的 extensions 数组
     if (mode && mode.id) {
-      console.log("[ExtensionGridView] Updating mode extensions:", {
-        modeId: mode.id,
-        modeName: mode.name,
-        extensionId: item.id,
-        extensionEnabled: item.enabled
-      })
 
       try {
         // 获取所有模式
@@ -78,11 +72,6 @@ const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivi
           // 保存更新后的模式
           await storage.mode.update(targetMode)
 
-          console.log("[ExtensionGridView] Mode updated:", {
-            modeId: targetMode.id,
-            extensionsCount: targetMode.extensions.length,
-            extensions: targetMode.extensions
-          })
         }
       } catch (error) {
         console.error("[ExtensionGridView] Failed to update mode:", error)
@@ -127,60 +116,60 @@ const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivi
       ) : (
         <>
           <ul>
-        {items0.map((item) => {
-          return (
-            <li key={item.id}>
-              <ExtensionGridItem
-                item={item}
-                options={options}
-                isShowAppName={isShowAppName}
-                currentMode={currentMode}></ExtensionGridItem>
-            </li>
-          )
-        })}
-        {new Array(10).fill("").map((_, index) => (
-          <i key={index}></i>
-        ))}
-      </ul>
-      {dividerShow0 && <div className="divider"></div>}
-      <ul>
-        {items1.map((item) => {
-          return (
-            <li key={item.id}>
-              <ExtensionGridItem
-                item={item}
-                options={options}
-                isShowAppName={isShowAppName}
-                currentMode={currentMode}
-                onItemMove={onItemMove}></ExtensionGridItem>
-            </li>
-          )
-        })}
-        {new Array(10).fill("").map((_, index) => (
-          <i key={index}></i>
-        ))}
-      </ul>
-      {items1.length > 0 && items2.length > 0 && (
-        <Divider style={{ margin: "8px 10px", fontSize: "12px" }}>未启用</Divider>
-      )}
-      <ul>
-        {items2.map((item) => {
-          return (
-            <li key={item.id}>
-              <ExtensionGridItem
-                item={item}
-                options={options}
-                isShowAppName={isShowAppName}
-                currentMode={currentMode}
-                onItemMove={onItemMove}></ExtensionGridItem>
-            </li>
-          )
-        })}
-        {new Array(10).fill("").map((_, index) => (
-          <i key={index}></i>
-        ))}
-      </ul>
-      {isShowBottomDivider && <div className="divider"></div>}
+            {items0.map((item) => {
+              return (
+                <li key={item.id}>
+                  <ExtensionGridItem
+                    item={item}
+                    options={options}
+                    isShowAppName={isShowAppName}
+                    currentMode={currentMode}></ExtensionGridItem>
+                </li>
+              )
+            })}
+            {new Array(10).fill("").map((_, index) => (
+              <i key={index}></i>
+            ))}
+          </ul>
+          {dividerShow0 && <div className="divider"></div>}
+          <ul>
+            {items1.map((item) => {
+              return (
+                <li key={item.id}>
+                  <ExtensionGridItem
+                    item={item}
+                    options={options}
+                    isShowAppName={isShowAppName}
+                    currentMode={currentMode}
+                    onItemMove={onItemMove}></ExtensionGridItem>
+                </li>
+              )
+            })}
+            {new Array(10).fill("").map((_, index) => (
+              <i key={index}></i>
+            ))}
+          </ul>
+          {items1.length > 0 && items2.length > 0 && (
+            <Divider style={{ margin: "8px 10px", fontSize: "12px" }}>未启用</Divider>
+          )}
+          <ul>
+            {items2.map((item) => {
+              return (
+                <li key={item.id}>
+                  <ExtensionGridItem
+                    item={item}
+                    options={options}
+                    isShowAppName={isShowAppName}
+                    currentMode={currentMode}
+                    onItemMove={onItemMove}></ExtensionGridItem>
+                </li>
+              )
+            })}
+            {new Array(10).fill("").map((_, index) => (
+              <i key={index}></i>
+            ))}
+          </ul>
+          {isShowBottomDivider && <div className="divider"></div>}
         </>
       )}
     </GridViewSpaceStyle>

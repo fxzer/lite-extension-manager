@@ -124,17 +124,14 @@ function ModeManagement() {
     const restoreLastSelectedMode = async () => {
       try {
         const lastSelectedModeId = await localOptions.getValue("selectedModeIdInSettings")
-        console.log("[IndexMode] Last selected mode ID from storage:", lastSelectedModeId)
 
         if (lastSelectedModeId) {
           const lastMode = modeListInfo.find((m) => m.id === lastSelectedModeId)
           if (lastMode) {
-            console.log("[IndexMode] Restoring last selected mode:", lastMode.id, lastMode.name)
             setSelectedMode(lastMode)
             setIsInitialized(true)
             return
           } else {
-            console.log("[IndexMode] Last selected mode not found in list:", lastSelectedModeId)
           }
         }
       } catch (error) {
@@ -144,7 +141,6 @@ function ModeManagement() {
       // 如果没有保存的模式或模式不存在，选择默认模式
       const defaultMode = modeListInfo.find((m) => m.id === "default")
       if (defaultMode) {
-        console.log("[IndexMode] Using default mode:", defaultMode.id, defaultMode.name)
         setSelectedMode(defaultMode)
         setIsInitialized(true)
       }
@@ -167,7 +163,6 @@ function ModeManagement() {
     if (item?.id) {
       try {
         await localOptions.setValue("selectedModeIdInSettings", item.id)
-        console.log("[IndexMode] Saved selected mode:", item.id, item.name)
       } catch (error) {
         console.error("[IndexMode] Failed to save selected mode:", error)
       }

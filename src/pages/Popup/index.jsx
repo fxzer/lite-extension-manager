@@ -26,8 +26,9 @@ const root = createRoot(container)
 const storageViewApi = storage.helper.view.getApi()
 storageViewApi.message = message
 
+// ✅ 缓存优先：直接调用 prepare（内部已优化为缓存优先）
 prepare().then((props) => {
-  const settingMode = props.options.setting.darkMode ?? "system" // 默认跟随系统
+  const settingMode = props.options.setting.darkMode ?? "system"
   let isDarkMode = settingMode === "dark"
   if (settingMode === "system") {
     isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -77,7 +78,6 @@ function fireEvent(props) {
       lang: ul
     })
   }
-  // Fire a page view event on load
   if (document.readyState === "complete") {
     firePopupOpen()
   } else {

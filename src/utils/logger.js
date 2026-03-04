@@ -2,19 +2,14 @@ class Logger {
   isDebugMode = false
 
   init = () => {
-    const development = "development"
-    const production = "production"
     try {
       // eslint-disable-next-line no-undef
       const env = RUNTIME_ENV
-      console.log("ENV", env)
 
       if (env === "development") {
-        console.log("Running in development mode, enabling debug log output")
         this.isDebugMode = true
       }
     } catch (err) {
-      console.log("LOGGER INIT ENV ERROR", err)
     }
   }
 

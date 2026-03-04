@@ -27,7 +27,6 @@ export class LocalOptions {
       // 验证 activeModeId 是否指向有效的模式
       const validModeIds = ["default", "minimal", "development"]
       if (!validModeIds.includes(activeModeId) && !activeModeId.startsWith("mode_")) {
-        console.log("[LocalOptions] Clearing invalid activeModeId:", activeModeId)
         await this.forage.removeItem("activeModeId")
       }
     }

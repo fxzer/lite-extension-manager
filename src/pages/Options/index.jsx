@@ -34,8 +34,6 @@ ExtensionIconBuilder.build()
 ExtensionChannelWorker.build()
 checkLatestVersion()
 
-console.log(`Package: ${isEdgePackage() ? "Edge" : "Chrome"}`)
-console.log(`Runtime: ${isEdgeRuntime() ? "Edge" : "Chrome"}`)
 
 // Fire a page view event on load
 if (document.readyState === "complete") {

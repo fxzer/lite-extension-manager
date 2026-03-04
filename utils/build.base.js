@@ -28,7 +28,6 @@ function build(channel, callback) {
       console.error(err || stats.compilation.errors)
       throw new Error("webpack: Failed to build", err || stats.compilation.errors)
     } else {
-      console.log("webpack: Build complete")
       if (callback) {
         callback()
       }

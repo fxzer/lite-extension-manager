@@ -22,28 +22,37 @@ const ModeDropdown = memo(({ options, className, onModeChanged }) => {
 
   const raiseEnable = options.setting?.isRaiseEnableWhenSwitchGroup ?? true
 
-  // 执行模式切换
+  // 执行模式切换（初始化和用户点击都会调用）
   const handleModeChange = useCallback(
     (mode) => {
       setSelectedMode(mode)
       localOptions.setActiveModeId(mode?.id)
 
-      if (!mode || mode.id === "all") {
-        onModeChanged({
-          select: null,
-          action: raiseEnable
-        })
+      // ✅ 根据 raiseEnable 配置决定是否应用模式配置
+      if (raiseEnable) {
+        if (!mode || mode.id === "all") {
+          onModeChanged({
+            select: null,
+            action: true  // 应用配置
+          })
+        } else {
+          onModeChanged({
+            select: mode,
+            action: true  // 应用配置
+          })
+        }
       } else {
+        // 用户关闭了"切换模式时启用/禁用扩展"功能
         onModeChanged({
           select: mode,
-          action: raiseEnable
+          action: false  // 不应用配置
         })
       }
     },
     [raiseEnable, onModeChanged]
   )
 
-  // 初始化选中模式
+  // 初始化选中模式（会触发模式应用）
   useEffect(() => {
     if (!selectedMode && modes.length > 0) {
       localOptions.getActiveModeId().then((modeId) => {
@@ -51,20 +60,14 @@ const ModeDropdown = memo(({ options, className, onModeChanged }) => {
 
         // 如果保存的模式 ID 不存在（可能是残留数据），清除并使用默认模式
         if (modeId && !mode) {
-          console.log("[ModeDropdown] Invalid activeModeId, clearing:", modeId)
           localOptions.setActiveModeId("")
         }
 
         // 使用找到的模式或默认模式
         mode = mode || modes.find((m) => m.id === "default") || modes[0]
-        setSelectedMode(mode)
 
-        // 初始化时触发模式切换，确保扩展状态同步
-        // 无论是启用还是禁用了"切换模式时启用/禁用扩展"功能，都需要同步
-        if (mode) {
-          console.log("[ModeDropdown] Initial mode sync:", mode.id, mode.name)
-          handleModeChange(mode)
-        }
+        // ✅ 初始化时也应用模式配置
+        handleModeChange(mode)
       })
     }
   }, [selectedMode, modes, handleModeChange])

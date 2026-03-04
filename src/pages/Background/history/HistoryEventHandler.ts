@@ -21,7 +21,7 @@ export class HistoryEventHandler {
     "disabled"
   )
 
-  constructor(private EM: IExtensionManager, private service: HistoryService) {}
+  constructor(private EM: IExtensionManager, private service: HistoryService) { }
 
   public async onSelfInstalled(info: chrome.runtime.InstalledDetails) {
     if (info.reason === "install") {
@@ -80,7 +80,7 @@ export class HistoryEventHandler {
  * 历史记录关心的事件，这里是去重过滤之后的事件
  */
 export class HistoryEventRaiser {
-  constructor(private EM: IExtensionManager, private service: HistoryService) {}
+  constructor(private EM: IExtensionManager, private service: HistoryService) { }
 
   public async onInstalled(info: chrome.management.ExtensionInfo) {
     const old = await this.EM.Extension.service.getExtension(info.id)
@@ -181,7 +181,6 @@ export class HistoryEventRaiser {
    * 切换分组时，自动启用了扩展
    */
   public onManualEnabled(infos: chrome.management.ExtensionInfo[], group: config.IGroup) {
-    // console.log("onManualEnabled", infos, group)
     for (const info of infos) {
       const record = HistoryRecord.buildWithGroup(info, "enabled", group)
       this.service.add(record)
@@ -192,7 +191,6 @@ export class HistoryEventRaiser {
    * 切换分组时，自动禁用了扩展
    */
   public onManualDisabled(infos: chrome.management.ExtensionInfo[], group: config.IGroup) {
-    // console.log("onManualDisabled", infos, group)
     for (const info of infos) {
       const record = HistoryRecord.buildWithGroup(info, "disabled", group)
       this.service.add(record)
@@ -204,7 +202,7 @@ export class HistoryEventRaiser {
  * 重复事件过滤，对于扩展本身的造成的扩展禁用与启用，优先使用扩展管理器本身的事件，过滤掉浏览器的默认事件
  */
 class ReduplicativeEventFilter {
-  constructor(private output: HistoryEventRaiser, private eventType: "enabled" | "disabled") {}
+  constructor(private output: HistoryEventRaiser, private eventType: "enabled" | "disabled") { }
 
   private _threshold: number = 500
 

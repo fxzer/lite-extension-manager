@@ -8,7 +8,6 @@ export const sendMessage = async (message, params) => {
     }
     return await chromeP.runtime.sendMessage(JSON.stringify(msg))
   } catch (error) {
-    console.log("sendMessage", error)
   }
 }
 

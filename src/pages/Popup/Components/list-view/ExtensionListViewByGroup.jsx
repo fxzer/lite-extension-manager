@@ -21,12 +21,6 @@ const ExtensionListViewByGroup = memo(({ extensions, options, currentMode }) => 
 
     // 如果有当前模式，同步更新模式的 extensions 数组
     if (mode && mode.id) {
-      console.log("[ExtensionListViewByGroup] Updating mode extensions:", {
-        modeId: mode.id,
-        modeName: mode.name,
-        extensionId: item.id,
-        extensionEnabled: item.enabled
-      })
 
       try {
         // 获取所有模式
@@ -48,11 +42,6 @@ const ExtensionListViewByGroup = memo(({ extensions, options, currentMode }) => 
           // 保存更新后的模式
           await storage.mode.update(targetMode)
 
-          console.log("[ExtensionListViewByGroup] Mode updated:", {
-            modeId: targetMode.id,
-            extensionsCount: targetMode.extensions.length,
-            extensions: targetMode.extensions
-          })
         }
       } catch (error) {
         console.error("[ExtensionListViewByGroup] Failed to update mode:", error)

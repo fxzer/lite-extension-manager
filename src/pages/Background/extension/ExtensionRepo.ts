@@ -43,6 +43,43 @@ export class ExtensionRepo {
     return await this.forage.keys()
   }
 
+  /**
+   * 批量获取所有扩展记录
+   * 用于消除 N+1 查询问题
+   */
+  public async getAll(): Promise<Map<string, ExtensionRecord>> {
+    const keys = await this.forage.keys()
+    const records = new Map<string, ExtensionRecord>()
+
+    // 使用 Promise.all 并行获取所有记录
+    const promises = keys.map(async (key) => {
+      const record = await this.forage.getItem<ExtensionRecord>(key)
+      if (record) {
+        records.set(key, record)
+      }
+    })
+
+    await Promise.all(promises)
+    return records
+  }
+
+  /**
+   * 批量获取指定 ID 的扩展记录
+   */
+  public async getByIds(ids: string[]): Promise<Map<string, ExtensionRecord>> {
+    const records = new Map<string, ExtensionRecord>()
+
+    const promises = ids.map(async (id) => {
+      const record = await this.forage.getItem<ExtensionRecord>(id)
+      if (record) {
+        records.set(id, record)
+      }
+    })
+
+    await Promise.all(promises)
+    return records
+  }
+
   public async clear(): Promise<void> {
     await this.forage.clear()
   }

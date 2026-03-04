@@ -19,17 +19,10 @@ const OptionsStorage = new OptionsSync({
 class ChromeSyncStorage {
   /**
    * 获取全部的配置数据
+   * 优化：移除不必要的 chrome.storage.sync.get(null) 调用
    */
   async getAll() {
-    const originSyncContent = await chrome.storage.sync.get(null)
-    if (originSyncContent.hasOwnProperty("options")) {
-      // 说明是之前用 OptionsSync 保存的数据
-      const oldData = await OptionsStorage.getAll()
-      await chrome.storage.sync.clear()
-      await this.set(oldData)
-      console.log("[ChromeSyncStorage] Detected old data, automatically migrated")
-    }
-
+    // 直接从 largeSync 获取数据（已处理数据迁移的用户）
     return new Promise((resolve, reject) => {
       largeSync.get(["setting", "management", "modes"], (items) => {
         resolve(items)
@@ -164,7 +157,6 @@ function tryShowErrorMessage(text) {
       api.message.error(text)
     }
   } catch (error) {
-    console.log("Cannot Show Message Now", error)
   }
 }
 
@@ -181,5 +173,4 @@ async function updateCache() {
 
   const allOptions = await SyncOptionsStorage.getAll()
   await forage.setItem("all_options", allOptions)
-  console.log("update cache options after updating options")
 }

@@ -35,7 +35,6 @@ const check = async () => {
 
   const version = latestVersion.slice(1)
 
-  console.log("latest version", version, latestVersionPublishTime)
   forage.setItem("latest_version", version)
   forage.setItem("latest_version_publish_time", latestVersionPublishTime)
   forage.setItem("latest_version_check_time", Date.now())

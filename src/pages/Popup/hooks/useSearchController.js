@@ -4,7 +4,12 @@ import { filterExtensions, isAppExtension, isExtExtension } from ".../utils/exte
 import isMatch from ".../utils/searchHelper"
 
 /**
- * 根据搜索词和当前选择的模式变化，执行搜索
+ * 扩展搜索控制器
+ *
+ * 功能说明：
+ * - Popup 始终显示所有扩展（快捷管理入口）
+ * - 模式切换只影响"启用/禁用"操作，不影响显示
+ * - 搜索功能可以按名称、描述等过滤扩展
  */
 export const useSearchController = (extensions) => {
   // 普通扩展
@@ -12,29 +17,20 @@ export const useSearchController = (extensions) => {
   // APP 类型的扩展
   const [appExtensions, setAppExtensions] = useState([])
 
-  // 当前模式（空表示显示全部）
-  const [currentMode, setCurrentMode] = useState(null)
   // 当前的搜索词
   const [currentSearchText, setSearchText] = useState("")
 
   // 执行普通扩展的搜索
+  // ✅ 修复：移除 mode 参数，始终显示所有扩展
   const searchPlugin = useCallback(
-    (mode, search) => {
-      let modeExtensions = []
-      if (mode) {
-        if (!mode.extensions || mode.extensions.length === 0) {
-          return modeExtensions
-        }
-
-        modeExtensions = extensions.filter((ext) => mode.extensions.includes(ext.id))
-      } else {
-        modeExtensions = filterExtensions(extensions, isExtExtension)
-      }
+    (search) => {
+      // ✅ 始终显示所有扩展，不再根据模式过滤
+      let allExtensions = filterExtensions(extensions, isExtExtension)
 
       if (!search || search.trim() === "") {
-        return modeExtensions
+        return allExtensions
       } else {
-        const result = modeExtensions.filter((ext) => {
+        const result = allExtensions.filter((ext) => {
           return isMatch(
             [
               ext.name,
@@ -71,18 +67,20 @@ export const useSearchController = (extensions) => {
 
   // 初始化扩展列表
   useEffect(() => {
-    setPluginExtensions(searchPlugin(currentMode, currentSearchText))
+    setPluginExtensions(searchPlugin(currentSearchText))
     setAppExtensions(searchApp(currentSearchText))
-  }, [currentMode, currentSearchText, searchPlugin, searchApp])
+  }, [currentSearchText, searchPlugin, searchApp])
 
   // 执行搜索，搜索词变更时调用
   const onSearchByTextChange = (text) => {
     setSearchText(text)
   }
 
-  // 执行搜索，当前模式变更时调用
+  // ✅ 保留此函数以兼容现有接口，但内部不再做任何过滤
+  // 模式切换现在只影响"启用/禁用"操作，不影响显示
   const onSearchByModeChange = (mode) => {
-    setCurrentMode(mode)
+    // 不再需要根据模式过滤扩展列表
+    // 此函数保留是为了向后兼容，但不执行任何操作
   }
 
   return [pluginExtensions, appExtensions, onSearchByTextChange, onSearchByModeChange]

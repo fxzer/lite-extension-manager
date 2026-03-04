@@ -69,7 +69,6 @@ export class Analytics {
     const ua = await getUserAgent()
 
     if (isDevRuntime()) {
-      console.log("fireEvent on dev", name, params)
       return
     }
 
@@ -84,8 +83,7 @@ export class Analytics {
 
     try {
       const response = await fetch(
-        `${
-          this.debug ? GA_DEBUG_ENDPOINT : GA_ENDPOINT
+        `${this.debug ? GA_DEBUG_ENDPOINT : GA_ENDPOINT
         }?measurement_id=${MEASUREMENT_ID}&api_secret=${API_SECRET}`,
         {
           method: "POST",
@@ -104,7 +102,6 @@ export class Analytics {
       if (!this.debug) {
         return
       }
-      console.log(await response.text())
     } catch (e) {
       console.error("Google Analytics request failed with an exception", e)
     }

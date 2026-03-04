@@ -6,7 +6,7 @@
  *
  * IndexedDB 规则：版本号只能递增，不能递减
  */
-export const DATABASE_VERSION = 11.0
+export const DATABASE_VERSION = 1.0
 
 /**
  * 数据库名称

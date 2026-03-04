@@ -93,6 +93,7 @@ export async function findTopExtensions(extensions, options) {
 
 /**
  * 最近更新的扩展，返回的是 ID 列表
+ * 优化：使用批量获取消除 N+1 查询问题
  */
 async function findTopExtensionsByRecentlyUpdate(options) {
   if (!options.setting.isTopRecentlyUpdate) {
@@ -102,14 +103,9 @@ async function findTopExtensionsByRecentlyUpdate(options) {
   const mode = options.setting.topRecentlyMode ?? "install"
   const days = options.setting.topRecentlyDays ?? 7
 
-  const ids = await extensionRecordRepo.getKeys()
-  const records = []
-  for (const id of ids) {
-    const record = await extensionRecordRepo.get(id)
-    if (record) {
-      records.push(record)
-    }
-  }
+  // ✅ 批量获取所有记录，消除 N+1 查询
+  const recordsMap = await extensionRecordRepo.getAll()
+  const records = Array.from(recordsMap.values())
 
   const normalizeTime = (t) => {
     if (!t) {

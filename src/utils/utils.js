@@ -39,12 +39,10 @@ export const downloadImageDataUrl = (imageUrl) => {
         var reader = new FileReader()
         reader.onloadend = () => {
           var dataUrl = reader.result
-          // console.log("图片下载并转换为 data URL 成功:", dataUrl)
           resolve(dataUrl)
         }
         reader.readAsDataURL(blob)
       } else {
-        // console.log("下载图片失败:", xhr.status)
         reject(Error(`Image Fetch Error. ${xhr.status}`))
       }
     }

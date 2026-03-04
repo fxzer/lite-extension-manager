@@ -57,16 +57,6 @@ async function buildShowItems(extensions, options) {
 
   const modeArray = options.modes ?? []
 
-  // 调试日志：输出模式配置
-  console.log(
-    "[usePopupExtensionsByMode] Processing modes:",
-    modeArray.map((m) => ({
-      id: m.id,
-      name: m.name,
-      extensionsCount: m.extensions?.length || 0,
-      extensions: m.extensions
-    }))
-  )
 
   const asyncModes = modeArray.map(async (m) => {
     // 不显示空模式

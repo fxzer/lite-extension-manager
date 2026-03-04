@@ -64,24 +64,12 @@ const useModeItems = (selectedMode, modeListInfo, extensions, hiddenQuickFilter)
     duplicateMode.extensions = enabled.map((ext) => ext.id)
 
     // 调试日志
-    console.log("[useModeItems.save] Saving mode:", {
-      id: duplicateMode.id,
-      name: duplicateMode.name,
-      extensionsCount: duplicateMode.extensions?.length || 0,
-      extensions: duplicateMode.extensions
-    })
 
     await storage.mode.update(duplicateMode)
 
     // 验证保存结果
     const modes = await storage.mode.getModes()
     const savedMode = modes.find((m) => m.id === mode.id)
-    console.log("[useModeItems.save] Saved mode verified:", {
-      id: savedMode?.id,
-      name: savedMode?.name,
-      extensionsCount: savedMode?.extensions?.length || 0,
-      extensions: savedMode?.extensions
-    })
   }
 
   const onItemClick = ({ item, mode, action }) => {

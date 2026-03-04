@@ -5,7 +5,6 @@ import createExtension from "./extension"
 import createHistory from "./history"
 import createMessageHandler from "./message/messageIndex.js"
 
-console.log(`[Extension Manager] Background Run. ${new Date().toLocaleString()}`)
 
 // 日志初始化
 logger().init()
@@ -21,15 +20,15 @@ chrome.runtime.onInstalled.addListener((info) => {
   EM.EventCache.add("onInstalled", info)
 })
 
-// initial running
-;(async () => {
-  const local = new LocalOptions()
-  await local.migrate()
-  EM.LocalOptions = local
+  // initial running
+  ; (async () => {
+    const local = new LocalOptions()
+    await local.migrate()
+    EM.LocalOptions = local
 
-  EM.Extension = await createExtension(EM)
+    EM.Extension = await createExtension(EM)
 
-  EM.History = await createHistory(EM)
+    EM.History = await createHistory(EM)
 
-  createMessageHandler(EM)
-})()
+    createMessageHandler(EM)
+  })()

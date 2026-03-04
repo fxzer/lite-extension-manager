@@ -11,75 +11,28 @@ const forage = localforage.createInstance({
   storeName: "options"
 })
 
-export const prepare = async function () {
-  const allOptions = await getOptions()
+/**
+ * 获取配置信息（优先缓存，后台刷新）
+ */
+async function getOptionsWithCache() {
+  try {
+    // 先尝试从缓存读取（快速响应）
+    const cachedOptions = await forage.getItem("all_options")
+    if (cachedOptions) {
+      // 后台静默刷新最新数据（不阻塞）
+      storage.options.getAll()
+        .then((allOptions) => forage.setItem("all_options", allOptions))
+        .catch(() => {}) // 静默失败，不影响当前渲染
 
-  const extensions = await getShownExtensions(allOptions)
-
-  // popup 宽度设置
-  document.body.style.width = getPopupWidth(
-    allOptions.setting.layout,
-    extensions.length,
-    allOptions.setting.columnCountInGirdView
-  )
-
-  let zoom = 1
-  if (allOptions.setting.zoomRatio) {
-    zoom = allOptions.setting.zoomRatio / 100
+      return cachedOptions
+    }
+  } catch (_) {
+    // 缓存读取失败，继续从 storage 获取
   }
 
-  document.body.style.zoom = zoom
-
-  return {
-    // 插件信息
-    extensions: extensions,
-    // 用户配置信息
-    options: allOptions,
-    // 运行时临时参数
-    params: {}
-  }
-}
-
-/**
- * 获取要显示的扩展
- */
-async function getShownExtensions(allOptions) {
-  let allExtensions = await chrome.management.getAll()
-
-  // 不展示主题类的扩展，不展示自己
-  const selfId = await getSelfId()
-  allExtensions = allExtensions
-    .filter((ext) => ext.type !== "theme")
-    .filter((ext) => ext.id !== selfId)
-
-  // 填充附加信息
-  const extensions = appendAdditionInfo(allExtensions, allOptions.management)
-
-  return extensions
-}
-
-/**
- * 获取所有配置信息
- * 每次都从 storage 获取最新数据，确保与模式管理同步
- */
-async function getOptions() {
-  // 直接从 storage 获取最新数据
+  // 缓存未命中，直接从 storage 获取并缓存
   const allOptions = await storage.options.getAll()
-
-  // 调试日志：输出模式数据
-  console.log(
-    "[prepare.js] Loaded modes:",
-    allOptions.modes?.map((m) => ({
-      id: m.id,
-      name: m.name,
-      extensionsCount: m.extensions?.length || 0,
-      extensions: m.extensions
-    }))
-  )
-
-  // 更新缓存（供下次使用）
   await forage.setItem("all_options", allOptions)
-
   return allOptions
 }
 
@@ -95,4 +48,50 @@ async function getSelfId() {
   const self = await chrome.management.getSelf()
   await forage.setItem("self_id", self.id)
   return self.id
+}
+
+/**
+ * 过滤要显示的扩展
+ */
+function filterExtensions(allExtensions, selfId, allOptions) {
+  return appendAdditionInfo(
+    allExtensions
+      .filter((ext) => ext.type !== "theme")
+      .filter((ext) => ext.id !== selfId),
+    allOptions.management
+  )
+}
+
+/**
+ * 准备 Popup 所需数据
+ * 优化：并行获取，缓存优先
+ */
+export const prepare = async function () {
+  // ✅ 并行获取：配置、扩展列表、自身ID
+  const [allOptions, allExtensions, selfId] = await Promise.all([
+    getOptionsWithCache(),
+    chrome.management.getAll(),
+    getSelfId()
+  ])
+
+  // 过滤扩展
+  const extensions = filterExtensions(allExtensions, selfId, allOptions)
+
+  // 设置 popup 宽度
+  document.body.style.width = getPopupWidth(
+    allOptions.setting.layout,
+    extensions.length,
+    allOptions.setting.columnCountInGirdView
+  )
+
+  // 设置缩放比例
+  if (allOptions.setting.zoomRatio) {
+    document.body.style.zoom = allOptions.setting.zoomRatio / 100
+  }
+
+  return {
+    extensions,
+    options: allOptions,
+    params: {}
+  }
 }

@@ -21,6 +21,44 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
   // 当前选中的模式
   const [currentMode, setCurrentMode] = useState(null)
 
+  // ✅ 双向同步：Popup → 模式管理
+  // 当用户手动启用/禁用扩展时，同步更新当前模式的 extensions 列表
+  const syncModeExtensions = async (extensionId, enabled) => {
+    if (!currentMode || currentMode.id === "all") {
+      return
+    }
+
+    try {
+      // 获取最新模式数据
+      const modes = await storage.mode.getModes()
+      const mode = modes.find((m) => m.id === currentMode.id)
+
+      if (!mode) {
+        console.warn("[Popup→模式同步] 未找到模式:", currentMode.id)
+        return
+      }
+
+      // 更新模式的 extensions 列表
+      let modeExtensions = mode.extensions || []
+
+      if (enabled) {
+        // 启用：添加到列表（如果不存在）
+        if (!modeExtensions.includes(extensionId)) {
+          mode.extensions = [...modeExtensions, extensionId]
+          await storage.mode.update(mode)
+        }
+      } else {
+        // 禁用：从列表中移除
+        if (modeExtensions.includes(extensionId)) {
+          mode.extensions = modeExtensions.filter((id) => id !== extensionId)
+          await storage.mode.update(mode)
+        }
+      }
+    } catch (error) {
+      console.error("[Popup→模式同步] 同步失败:", error)
+    }
+  }
+
   // 启用的扩展数量（不包括 APP 类型）
   const [activeExtensionCount, setActiveExtensionCount] = useState(0)
   // 总扩展数量，不包括 APP 类型
@@ -46,18 +84,24 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
   // 扩展启用与禁用之后，更新显示
   useEffect(() => {
     const onEnabled = (info) => {
-      const one = extensions.find((ext) => ext.id === info.id)
-      if (one) {
-        one.enabled = true
-        setExtensions([...extensions])
-      }
+      // ✅ 修复：使用不可变更新，创建新对象而不是直接修改
+      setExtensions((prevExtensions) =>
+        prevExtensions.map((ext) =>
+          ext.id === info.id ? { ...ext, enabled: true } : ext
+        )
+      )
+      // ✅ 双向同步：同步更新当前模式的 extensions 列表
+      syncModeExtensions(info.id, true)
     }
     const onDisabled = (info) => {
-      const one = extensions.find((ext) => ext.id === info.id)
-      if (one) {
-        one.enabled = false
-        setExtensions([...extensions])
-      }
+      // ✅ 修复：使用不可变更新，创建新对象而不是直接修改
+      setExtensions((prevExtensions) =>
+        prevExtensions.map((ext) =>
+          ext.id === info.id ? { ...ext, enabled: false } : ext
+        )
+      )
+      // ✅ 双向同步：同步更新当前模式的 extensions 列表
+      syncModeExtensions(info.id, false)
     }
     chrome.management.onEnabled.addListener(onEnabled)
     chrome.management.onDisabled.addListener(onDisabled)
@@ -65,7 +109,7 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
       chrome.management.onEnabled.removeListener(onEnabled)
       chrome.management.onDisabled.removeListener(onDisabled)
     }
-  }, [extensions])
+  }, [currentMode])  // ✅ 依赖 currentMode，确保能访问最新模式
 
   // 监听 storage 变化（模式配置更新时同步刷新）
   useEffect(() => {
@@ -86,11 +130,27 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
       const hasSettingChange = changedKeys.includes("setting")
 
       if (hasModesChange || hasSettingChange) {
-        console.log("[Popup] Storage changed, refreshing options...", changedKeys)
 
         // 模式配置已更新，重新获取配置
         const newOptions = await storage.options.getAll()
         setOptions(newOptions)
+
+        if (hasModesChange && currentMode && newOptions.setting?.isRaiseEnableWhenSwitchGroup
+          && currentMode.id !== "all") {
+          const modes = await storage.mode.getModes()
+          const updatedMode = modes.find((m) => m.id === currentMode.id)
+
+          if (updatedMode) {
+            // 重新应用模式配置
+            const newExtensions = await handleExtensionOnOff(
+              extensions,
+              newOptions,
+              [updatedMode],
+              updatedMode
+            )
+            setExtensions(newExtensions)
+          }
+        }
 
         // 同时更新 localforage 缓存
         try {
@@ -102,7 +162,6 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
             storeName: "options"
           })
           await forage.setItem("all_options", newOptions)
-          console.log("[Popup] Cache updated")
         } catch (e) {
           console.error("[Popup] Failed to update cache:", e)
         }
@@ -113,7 +172,6 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
 
     // 同时监听窗口焦点事件，当 Popup 重新获得焦点时刷新数据
     const handleFocus = async () => {
-      console.log("[Popup] Window focused, refreshing options...")
       const newOptions = await storage.options.getAll()
       setOptions(newOptions)
     }
@@ -137,9 +195,7 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
     // 更新当前模式状态
     setCurrentMode(args.select)
 
-    // 如果开启了配置，切换模式意味着：执行扩展的启用与禁用，没有切换显示的功能
-    // 如果开启了配置，并且当前模式不为空，则执行扩展的启用与禁用
-    if (args.action && args.select) {
+    if (args.action && args.select && args.select.id !== "all") {
       const newExtensions = await handleExtensionOnOff(
         extensions,
         options,
@@ -149,8 +205,8 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
       setExtensions(newExtensions)
     }
 
-    // 多选
-    if (args.action && args.selects) {
+    // 多选（多选模式下不应该包含默认模式，但为了保险起见也加上判断）
+    if (args.action && args.selects && args.current) {
       const newExtensions = await handleExtensionOnOff(
         extensions,
         options,

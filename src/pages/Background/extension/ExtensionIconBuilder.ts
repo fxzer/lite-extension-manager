@@ -68,7 +68,6 @@ export class ExtensionIconBuilder {
       return
     }
 
-    console.log("[ExtensionIconBuilder] build")
 
     const keys = await this.repo.getKeys()
 
