@@ -1,12 +1,11 @@
 import React, { forwardRef, memo, useEffect, useImperativeHandle, useState } from "react"
 
-import { Divider, Empty, Input } from "antd"
+import { Divider, Empty } from "antd"
 import { styled } from "styled-components"
 
 import isMatch from ".../utils/searchHelper"
 import ExtensionItems from "./ExtensionItems"
 
-const { Search } = Input
 
 const ExtensionTarget = ({ options, config, extensions, searchText, params, children }, ref) => {
   let emptyMessage = params.emptyMessage
@@ -22,7 +21,6 @@ const ExtensionTarget = ({ options, config, extensions, searchText, params, chil
       }
 
       return {
-        groups: [],
         extensions: selectedExtensions.map((e) => e.id)
       }
     }
@@ -146,3 +144,4 @@ const Style = styled.div`
     margin-top: 12px;
   }
 `
+

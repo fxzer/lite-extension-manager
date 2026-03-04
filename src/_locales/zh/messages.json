@@ -3,7 +3,7 @@
     "message": "扩展管理器（Extension Manager）"
   },
   "ext_desc": {
-    "message": "一个可以轻量、可分组管理插件的扩展管理工具"
+    "message": "一个轻量、支持模式管理的扩展管理工具"
   },
   "add": {
     "message": "添加"
@@ -287,42 +287,6 @@
   "management_export_md_template_default": {
     "message": "默认模板"
   },
-  "snapshot_disable_all": {
-    "message": "禁用全部"
-  },
-  "snapshot_enable_all": {
-    "message": "启用全部"
-  },
-  "snapshot_capture": {
-    "message": "保存快照"
-  },
-  "snapshot_restore": {
-    "message": "恢复快照"
-  },
-  "snapshot_rename": {
-    "message": "重命名快照"
-  },
-  "snapshot_delete_all": {
-    "message": "删除全部快照"
-  },
-  "snapshot_save_success": {
-    "message": "快照已保存：$1"
-  },
-  "snapshot_resume_success": {
-    "message": "正在恢复快照：$1"
-  },
-  "snapshot_delete_success": {
-    "message": "快照已删除：$1"
-  },
-  "snapshot_delete_all_success": {
-    "message": "已删除全部快照"
-  },
-  "snapshot_rename_success": {
-    "message": "快照已重命名为：$1"
-  },
-  "snapshot_no_extensions": {
-    "message": "没有任何扩展"
-  },
   "mode_title": {
     "message": "模式管理"
   },
@@ -438,7 +402,7 @@
     "message": "筛选扩展"
   },
   "mode_description": {
-    "message": "模式中的启用/禁用扩展切换会自动同步到 Popup 弹出层对应的模式插件状态。"
+    "message": "双击可以修改模式名。模式中的启用/禁用扩展切换会自动同步到 Popup 弹出层对应的模式插件状态。"
   },
   "exclude_other_mode_extensions": {
     "message": "排除其他模式中的扩展"
@@ -470,9 +434,6 @@
   "search_placeholder_local_store": {
     "message": "Enter 本地搜索，Shift+Enter 商店搜索(右侧可选择搜索源)"
   },
-  "group_name_too_long": {
-    "message": "分组名称不能超过6个字符"
-  },
   "record_on": {
     "message": "开启"
   },
@@ -485,64 +446,13 @@
   "popup_hide_ext_name": {
     "message": "隐藏扩展名称"
   },
-  "snapshot_title": {
-    "message": "快照管理"
+  "disable_all_extensions": {
+    "message": "禁用全部"
   },
-  "snapshot_description": {
-    "message": "快照保存当前所有扩展的启用/禁用状态。恢复快照时会跳过已卸载的扩展。"
+  "enable_all_extensions": {
+    "message": "启用全部"
   },
-  "snapshot_empty_state": {
-    "message": "暂无快照，请在弹出窗口中保存快照"
-  },
-  "snapshot_delete_title": {
-    "message": "删除快照"
-  },
-  "snapshot_delete_confirm": {
-    "message": "确认删除快照 \"$1\""
-  },
-  "snapshot_name_cannot_empty": {
-    "message": "快照名称不能为空"
-  },
-  "snapshot_created_at": {
-    "message": "创建时间"
-  },
-  "snapshot_total_extensions": {
-    "message": "总扩展"
-  },
-  "snapshot_installed_count": {
-    "message": "已安装"
-  },
-  "snapshot_uninstalled_count": {
-    "message": "已卸载"
-  },
-  "snapshot_installed": {
-    "message": "未卸载扩展"
-  },
-  "snapshot_uninstalled": {
-    "message": "已卸载扩展"
-  },
-  "snapshot_no_installed": {
-    "message": "该快照中没有已安装的扩展"
-  },
-  "snapshot_uninstalled_extension": {
-    "message": "已卸载的扩展"
-  },
-  "snapshot_click_to_install": {
-    "message": "点击重新安装"
-  },
-  "snapshot_restore_button": {
-    "message": "恢复快照"
-  },
-  "snapshot_restore_complete": {
-    "message": "恢复完成"
-  },
-  "snapshot_restored_count": {
-    "message": "已恢复 $1 个扩展"
-  },
-  "snapshot_skipped_count": {
-    "message": "跳过 $1 个已卸载"
-  },
-  "snapshot_failed_count": {
-    "message": "$1 个失败"
+  "history_feature_closed": {
+    "message": "历史记录功能已关闭"
   }
 }

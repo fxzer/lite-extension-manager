@@ -1,5 +1,10 @@
 @import url(../reset.css);
 
+:root {
+  /* Header 高度，搜索框展开时会动态调整为 90px */
+  --header-height: 42px;
+}
+
 body {
   width: 420px;
   margin: 0;
@@ -22,9 +27,7 @@ code {
 }
 
 .ant-dropdown-menu {
-  border: 1px solid var(--menu-border-color, rgba(0, 0, 0, 0.08)) !important;
   border-radius: 6px !important;
-  box-shadow: 0 4px 12px var(--shadow-color, rgba(0, 0, 0, 0.06)) !important;
   padding: 4px !important;
 }
 

@@ -161,25 +161,25 @@ const ExtensionHistory = memo(({ records, hiddenExtensionIds, loading }) => {
       },
       filters: isEdgeRuntime()
         ? [
-            {
-              text: "Edge",
-              value: "Edge"
-            },
-            {
-              text: "Chrome",
-              value: "Chrome"
-            },
-            {
-              text: "Dev",
-              value: "Development"
-            }
-          ]
+          {
+            text: "Edge",
+            value: "Edge"
+          },
+          {
+            text: "Chrome",
+            value: "Chrome"
+          },
+          {
+            text: "Dev",
+            value: "Development"
+          }
+        ]
         : [
-            {
-              text: "Dev",
-              value: "Development"
-            }
-          ],
+          {
+            text: "Dev",
+            value: "Development"
+          }
+        ],
       onFilter: (value, record) => {
         return record.__extension__?.channel === value
       },
@@ -262,7 +262,7 @@ const ExtensionHistory = memo(({ records, hiddenExtensionIds, loading }) => {
           {/* 搜索 */}
           <Search
             className="search"
-            placeholder="search"
+            placeholder=""
             allowClear
             value={searchWord}
             onSearch={onSearch}

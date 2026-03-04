@@ -13,6 +13,7 @@ import AppList from "./AppList"
 import Header from "./Header"
 import ExtensionGrid from "./grid-view/ExtensionGridView.jsx"
 import ExtensionList from "./list-view/ExtensionListView"
+import { DropdownGlobalStyle } from "./HeaderStyle"
 
 function IndexPopup({ originExtensions, options: initialOptions, params }) {
   const [extensions, setExtensions] = useState(originExtensions)
@@ -254,6 +255,7 @@ function IndexPopup({ originExtensions, options: initialOptions, params }) {
 
   return (
     <Style>
+      <DropdownGlobalStyle />
       <div className="header-container">
         <Header
           activeCount={activeExtensionCount}
@@ -288,24 +290,6 @@ const Style = styled.div`
   background-color: ${(props) => props.theme.bg};
   color: ${(props) => props.theme.fg};
 
-  :root {
-    /* HeaderStyle 中设置的 Header 高度，不包括搜索框 */
-    --header-height: 42px;
-    /* 背景颜色 */
-    --bg: ${(props) => props.theme.menuBg};
-    /* 前景颜色 */
-    --fg: ${(props) => props.theme.menuText};
-    /* 边框颜色 */
-    --border-color: ${(props) => props.theme.inputBorder};
-    --divider-color: ${(props) => props.theme.inputBorder}33;
-    /* 菜单边框颜色 - 比普通边框更淡 */
-    --menu-border-color: ${(props) => props.theme.borderDivider};
-    /* 菜单 hover 背景色 - 暗黑模式使用白色半透明 */
-    --menu-hover-bg: ${(props) => props.theme.hoverBgMedium};
-    /* 阴影颜色 - 暗黑模式下使用白色阴影 */
-    --shadow-color: ${(props) => props.theme.shadow};
-  }
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -323,12 +307,12 @@ const Style = styled.div`
     flex: 1 1 auto;
     overflow: auto;
     margin-left: 0px;
-
-    /* Header 的高度 */
     margin-top: var(--header-height);
-
     min-height: 60px;
   }
+    .extension-container ul{
+      margin-bottom: 0px;
+    }
 
   .extension-container::-webkit-scrollbar {
     width: 4px;

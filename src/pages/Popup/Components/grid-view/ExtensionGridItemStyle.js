@@ -24,7 +24,7 @@ export const ExtensionGridItemStyle = styled.div`
   .grid-display-item-title {
     max-width: 66px;
     margin-top: 4px;
-    color: ${(props) => props.theme.enableText};
+    color: ${(props) => props.theme.fg};
 
     overflow: hidden;
     text-overflow: ellipsis;

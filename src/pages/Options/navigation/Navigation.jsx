@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { NavLink } from "react-router-dom"
 
 import {
-  CameraOutlined,
   ExportOutlined,
   FolderOpenOutlined,
   HistoryOutlined,
@@ -33,12 +32,6 @@ function Navigation() {
         <ToolOutlined />
         <span className="text">{getLang("management_title")}</span>
       </NavLink>
-      <NavLink to="/snapshot" className="nav-item" onClick={() => reportEvent("snapshot")}>
-        <CameraOutlined />
-        <span className="text">{getLang("snapshot_title")}</span>
-      </NavLink>
-
-
 
       <NavLink to="/export" className="nav-item" onClick={() => reportEvent("export")}>
         <ExportOutlined />

@@ -34,7 +34,7 @@ export const NavigationStyle = styled.div`
     text-align: center;
 
     &:hover {
-      background-color: ${(props) => props.theme.navHoverBg};
+      background-color: ${(props) => props.theme.hoverBgMedium};
     }
 
     &.active {

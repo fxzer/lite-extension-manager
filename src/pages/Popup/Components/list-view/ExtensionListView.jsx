@@ -52,7 +52,7 @@ export default ExtensionList
 
 const Style = styled.ul`
   li {
-    border-bottom: 1px solid ${(props) => props.theme.settingBorderBottom};
+    border-bottom: 1px solid ${(props) => props.theme.borderDivider};
   }
 
   li:last-child {

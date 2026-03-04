@@ -92,23 +92,7 @@ const SearchStyle = styled.div`
 
   input {
     width: 100%;
-    height: 32px;
-    padding: 0 12px;
-    padding-right: 32px;
-    box-sizing: border-box;
-
-    outline-style: none;
-    border: 1px solid ${(props) => props.theme.inputBorder};
-    border-radius: 4px;
-
-    &:focus {
-      border-color: ${(props) => props.theme.borderFocus};
-      outline: 0;
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 2px rgba(102, 175, 233, 0.6);
-    }
-
-    background-color: ${(props) => props.theme.bg};
-    color: ${(props) => props.theme.fg};
+    height: 30px;
   }
 
   .clear-icon {
@@ -124,6 +108,14 @@ const SearchStyle = styled.div`
     &:hover {
       color: ${(props) => props.theme.muted};
     }
+  }
+`
+
+// 下拉菜单的全局样式 - 使用主题变量支持明暗模式
+export const DropdownGlobalStyle = createGlobalStyle`
+  .ant-dropdown-menu {
+    border: 1px solid ${(props) => props.theme.borderDivider} !important;
+    box-shadow: 0 4px 12px ${(props) => props.theme.shadow} !important;
   }
 `
 

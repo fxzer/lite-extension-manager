@@ -136,9 +136,9 @@ export const ModeContentStyle = styled.div`
   .other-mode-info-name {
     margin: 1px 0;
     padding: 2px 4px;
-    color: ${(props) => props.theme.group_other_color};
+    color: ${(props) => props.theme.muted};
     border-radius: 2px;
-    background-color: ${(props) => props.theme.group_other_bg};
+    background-color: ${(props) => props.theme.hoverBgMedium};
   }
 
   .mode-name-title {

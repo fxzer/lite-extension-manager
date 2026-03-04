@@ -136,7 +136,5 @@ const Style = styled.div`
     color: ${(props) => props.theme.subtle};
     font-size: 14px;
     line-height: 20px;
-
-    border-left: 2px solid ${(props) => props.theme.border3};
   }
 `
