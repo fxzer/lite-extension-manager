@@ -438,31 +438,7 @@
     "message": "筛选扩展"
   },
   "mode_description": {
-    "message": "模式中的启用/禁用扩展切换会自动同步到 Popup 弹出层对应的模式插件状态。可绑定快捷键快速切换模式。"
-  },
-  "mode_shortcut_title": {
-    "message": "快捷键"
-  },
-  "mode_shortcut_hint": {
-    "message": "按 Option+数字 快速切换模式"
-  },
-  "mode_shortcut_binding": {
-    "message": "快捷键绑定"
-  },
-  "mode_shortcut_empty": {
-    "message": "未设置"
-  },
-  "mode_shortcut_press_key": {
-    "message": "按下快捷键..."
-  },
-  "mode_switched_shortcut": {
-    "message": "已切换到模式：$1"
-  },
-  "mode_shortcut_instruction": {
-    "message": "点击后按下键盘组合键（如 Option+1）"
-  },
-  "mode_shortcut_conflict": {
-    "message": "快捷键 $2 已被模式「$1」占用"
+    "message": "模式中的启用/禁用扩展切换会自动同步到 Popup 弹出层对应的模式插件状态。"
   },
   "exclude_other_mode_extensions": {
     "message": "排除其他模式中的扩展"

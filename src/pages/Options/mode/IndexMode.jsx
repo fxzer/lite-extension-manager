@@ -42,9 +42,6 @@ function ModeManagement() {
   // 未模式扩展中，不显示其它模式的扩展
   const [hiddenOtherGroupInNoneGroup, setHiddenOtherGroupInNoneGroup] = useState(false)
 
-  // 快捷键映射缓存
-  const [shortcutMap, setShortcutMap] = useState(new Map())
-
   const [enabledExtensions, disabledExtensions, onItemClick] = useModeItems(
     selectedMode,
     modeListInfo,
@@ -56,39 +53,9 @@ function ModeManagement() {
     }
   )
 
-  // 加载所有快捷键映射
-  const loadShortcutMap = async () => {
-    const result = await chrome.storage.local.get()
-    const map = new Map()
-    for (const mode of modeListInfo) {
-      const shortcut = result[`mode_shortcut_${mode.id}`]
-      if (shortcut) {
-        map.set(shortcut, mode)
-      }
-    }
-    setShortcutMap(map)
-  }
-
-  // 初始化默认快捷键（只执行一次）
-  const initializeDefaultShortcuts = async () => {
-    const result = await chrome.storage.local.get()
-    const hasShortcuts = Object.keys(result).some(key => key.startsWith('mode_shortcut_'))
-
-    // 如果没有任何快捷键，设置默认值
-    if (!hasShortcuts && modeListInfo.length > 0) {
-      const shortcuts = {}
-      modeListInfo.slice(0, 9).forEach((mode, index) => {
-        shortcuts[`mode_shortcut_${mode.id}`] = `Alt+${index + 1}`
-      })
-      await chrome.storage.local.set(shortcuts)
-      await loadShortcutMap()
-    }
-  }
-
   async function updateByModeConfigs() {
     const modeList = await storage.mode.getModes()
     setModeListInfo(modeList)
-    await loadShortcutMap()
   }
 
   // 初始化
@@ -109,66 +76,6 @@ function ModeManagement() {
       })
     })
   }, [])
-
-  // 初始化默认快捷键
-  useEffect(() => {
-    if (modeListInfo.length > 0) {
-      initializeDefaultShortcuts()
-    }
-  }, [modeListInfo])
-
-  // 全局快捷键监听
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      // 只在选项页面激活时响应
-      if (document.hidden) return
-
-      const { altKey, code } = e
-
-      // 检查是否是 Alt + 数字键
-      if (altKey && /^Digit[1-9]$/.test(code)) {
-        const number = code.replace('Digit', '')
-        const shortcut = `Alt+${number}`
-        const mode = shortcutMap.get(shortcut)
-
-        if (mode) {
-          e.preventDefault()
-          switchToMode(mode)
-        }
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [shortcutMap])
-
-  // 切换到指定模式
-  const switchToMode = async (mode) => {
-    setSelectedMode(mode)
-    await localOptions.setValue("selectedModeIdInSettings", mode.id)
-    // 保存到 LocalOptions，让 Popup 知道当前模式已切换
-    await localOptions.setActiveModeId(mode.id)
-
-    // 真正执行模式切换：启用/禁用扩展
-    if (options?.setting?.isRaiseEnableWhenSwitchGroup && mode.id !== "all") {
-      try {
-        const newExtensions = await handleExtensionOnOff(
-          extensions,
-          options,
-          [mode],
-          mode
-        )
-        setExtensions(newExtensions)
-      } catch (error) {
-        console.error("[快捷键切换] 模式切换失败:", error)
-      }
-    }
-
-    const message = getLang("mode_switched_shortcut", mode.name)
-    messageApi.success(message || `已切换到模式：${mode.name}`)
-  }
 
   // 如果 URL 中有 ID 参数，则切换到对应模式
   useEffect(() => {
@@ -286,11 +193,6 @@ function ModeManagement() {
     await updateByModeConfigs()
   }
 
-  // 快捷键绑定变化时重新加载映射
-  const onShortcutBindingChange = async () => {
-    await loadShortcutMap()
-  }
-
   if (!options) {
     return null
   }
@@ -300,14 +202,7 @@ function ModeManagement() {
       <Title title={getLang("mode_title")}></Title>
       {contextHolder}
       <Alert
-        description={
-          <span>
-            {getLang("mode_description")}{" "}
-            <span style={{ marginLeft: 8, opacity: 0.8 }}>
-              {getLang("mode_shortcut_hint")}
-            </span>
-          </span>
-        }
+        description={getLang("mode_description")}
         type="info"
         showIcon
         icon={<InfoCircleOutlined />}
@@ -336,8 +231,7 @@ function ModeManagement() {
                 mode={selectedMode}
                 modeList={modeListInfo}
                 options={options}
-                onItemClick={onItemClick}
-                onShortcutBindingChange={onShortcutBindingChange}>
+                onItemClick={onItemClick}>
                 <div className="setting-item">
                   <span>排除其他模式中的扩展</span>
                   <Switch

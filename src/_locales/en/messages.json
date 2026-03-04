@@ -426,31 +426,7 @@
     "message": "Filter Extensions"
   },
   "mode_description": {
-    "message": "Enabling/disabling extensions in the mode will automatically sync to the corresponding mode plugin status in the Popup. You can bind shortcut keys to quickly switch modes."
-  },
-  "mode_shortcut_title": {
-    "message": "Shortcuts"
-  },
-  "mode_shortcut_hint": {
-    "message": "Press Option+Number to quickly switch modes"
-  },
-  "mode_shortcut_binding": {
-    "message": "Shortcut Binding"
-  },
-  "mode_shortcut_empty": {
-    "message": "Not set"
-  },
-  "mode_shortcut_press_key": {
-    "message": "Press shortcut keys..."
-  },
-  "mode_switched_shortcut": {
-    "message": "Switched to mode: $1"
-  },
-  "mode_shortcut_instruction": {
-    "message": "Click and press keyboard combination (e.g., Option+1)"
-  },
-  "mode_shortcut_conflict": {
-    "message": "Shortcut $2 is already bound to mode \"$1\""
+    "message": "Enabling/disabling extensions in the mode will automatically sync to the corresponding mode plugin status in the Popup."
   },
   "exclude_other_mode_extensions": {
     "message": "Exclude extensions from other modes"
