@@ -5,8 +5,7 @@ import {
   ExportOutlined,
   FolderOpenOutlined,
   HistoryOutlined,
-  ImportOutlined,
-  ToolOutlined
+  ImportOutlined
 } from "@ant-design/icons"
 
 import analytics from ".../utils/googleAnalyze"
@@ -27,10 +26,6 @@ function Navigation() {
       <NavLink to="/mode" className="nav-item" onClick={() => reportEvent("mode")}>
         <FolderOpenOutlined />
         <span className="text">{getLang("mode_title")}</span>
-      </NavLink>
-      <NavLink to="/management" className="nav-item" onClick={() => reportEvent("management")}>
-        <ToolOutlined />
-        <span className="text">{getLang("management_title")}</span>
       </NavLink>
 
       <NavLink to="/export" className="nav-item" onClick={() => reportEvent("export")}>
