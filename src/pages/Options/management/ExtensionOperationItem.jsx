@@ -106,8 +106,11 @@ const ExtensionOperationItem = memo(({ record, options }) => {
       <Switch
         size="small"
         checked={itemEnable}
-        onClick={(e) => e.stopPropagation()}
-        onChange={(e) => onSwitchChange(e, record)}></Switch>
+        onClick={(_, e) => e?.stopPropagation()}
+        onChange={(checked, e) => {
+          e?.stopPropagation()
+          onSwitchChange(checked, record)
+        }}></Switch>
 
       <Tooltip title={getLang("extension_settings")}>
         <Space
