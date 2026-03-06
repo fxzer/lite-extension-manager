@@ -1,10 +1,12 @@
 import React, { memo, useEffect, useState } from "react"
 
-import { Divider, Empty, Input, message } from "antd"
+import { Divider, Empty, Input, message, Segmented } from "antd"
 
+import { LocalOptions } from "../../../storage/local"
 import { isExtensionMatch } from ".../utils/searchHelper"
 import { getLang } from ".../utils/utils"
 import ModeContentSpace from "./ModeContentSpace"
+import ModeTableContent from "./ModeTableContent"
 import { ModeContentStyle } from "./ModeContentStyle"
 
 const { Search } = Input
@@ -23,6 +25,8 @@ const ModeContent = memo((props) => {
   const [shownDisabledExts, setShownDisabledExts] = useState([])
   // 搜索词
   const [searchWord, setSearchWord] = useState("")
+  // 视图模式：grid（网格）或 table（表格）
+  const [viewMode, setViewMode] = useState("grid")
 
   // 搜索
   useEffect(() => {
@@ -38,9 +42,31 @@ const ModeContent = memo((props) => {
     setShownDisabledExts(shownDisabledExts)
   }, [searchWord, enabledExtensions, disabledExtensions])
 
+  // 初始化时恢复上次的视图模式
+  useEffect(() => {
+    const local = new LocalOptions()
+    local.getValue("modeViewMode").then((savedMode) => {
+      if (savedMode && ["grid", "table"].includes(savedMode)) {
+        setViewMode(savedMode)
+      }
+    }).catch((err) => {
+      console.error("[ModeContent] Failed to read viewMode:", err)
+    })
+  }, [])
+
   // 搜索
   const onSearch = (value) => {
     setSearchWord(value)
+  }
+
+  // 视图切换处理
+  const onViewModeChange = (value) => {
+    setViewMode(value)
+    // 保存到本地存储
+    const local = new LocalOptions()
+    local.setValue("modeViewMode", value).catch((err) => {
+      console.error("[ModeContent] Failed to save viewMode:", err)
+    })
   }
 
   return (
@@ -54,40 +80,60 @@ const ModeContent = memo((props) => {
           onSearch={onSearch}
           onChange={(e) => onSearch(e.target.value)}
         />
+        <Segmented
+          value={viewMode}
+          onChange={onViewModeChange}
+          options={[
+            { label: "网格", value: "grid" },
+            { label: "列表", value: "table" }
+          ]}
+        />
       </div>
-      <Divider orientation="center">已启用</Divider>
 
-      {shownEnabledExts.length > 0 ? (
-        <ModeContentSpace
-          shownItems={shownEnabledExts}
-          isModeEnabled={true}
+      {viewMode === "grid" ? (
+        <>
+          <Divider orientation="center">已启用</Divider>
+
+          {shownEnabledExts.length > 0 ? (
+            <ModeContentSpace
+              shownItems={shownEnabledExts}
+              isModeEnabled={true}
+              mode={mode}
+              modeList={modeList}
+              options={options}
+              notificationApi={messageApi}
+              onItemClick={onItemClick}></ModeContentSpace>
+          ) : (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={false} />
+          )}
+
+          <Divider orientation="center">未启用</Divider>
+
+          <div>{props.children}</div>
+
+          {shownDisabledExts.length > 0 ? (
+            <ModeContentSpace
+              shownItems={shownDisabledExts}
+              isModeEnabled={false}
+              mode={mode}
+              modeList={modeList}
+              options={options}
+              notificationApi={messageApi}
+              onItemClick={onItemClick}></ModeContentSpace>
+          ) : (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={false} />
+          )}
+
+          <p className="desc">{mode.desc}</p>
+        </>
+      ) : (
+        <ModeTableContent
           mode={mode}
+          extensions={[...enabledExtensions, ...disabledExtensions]}
           modeList={modeList}
           options={options}
-          notificationApi={messageApi}
-          onItemClick={onItemClick}></ModeContentSpace>
-      ) : (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={false} />
+        />
       )}
-
-      <Divider orientation="center">未启用</Divider>
-
-      <div>{props.children}</div>
-
-      {shownDisabledExts.length > 0 ? (
-        <ModeContentSpace
-          shownItems={shownDisabledExts}
-          isModeEnabled={false}
-          mode={mode}
-          modeList={modeList}
-          options={options}
-          notificationApi={messageApi}
-          onItemClick={onItemClick}></ModeContentSpace>
-      ) : (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={false} />
-      )}
-
-      <p className="desc">{mode.desc}</p>
     </ModeContentStyle>
   )
 })
