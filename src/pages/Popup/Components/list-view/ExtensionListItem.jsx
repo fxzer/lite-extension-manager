@@ -28,9 +28,7 @@ const manualEnableCounter = new ManualEnableCounter()
 const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEnableChanged }) => {
   const [messageApi, contextHolder] = message.useMessage()
 
-  const [isHover, setIsHover] = useState(false)
-  const [isInteractive, setIsInteractive] = useState(false)
-  const [isShowOperationButton, setIsShowOperationButton] = useState(false)
+  const isShowOperationAlways = options.setting?.isShowItemOperationAlways ?? false
 
   const [itemEnable, setItemEnable] = useState(enabled ?? item.enabled)
   const existOptionPage = !isStringEmpty(item.optionsUrl)
@@ -49,11 +47,6 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
     setItemEnable(item.enabled)
   }, [item, enabled])
 
-  useEffect(() => {
-    const showButtonAlways = options.setting?.isShowItemOperationAlways ?? false
-    setIsShowOperationButton(showButtonAlways)
-  }, [options])
-
   const onSwitchChange = async (checked, item) => {
     await chrome.management.setEnabled(item.id, checked)
     setItemEnable(checked)
@@ -69,18 +62,8 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
     onSwitchChange(!item.enabled, item)
   }
 
-  const onItemMouseOver = (e) => {
-    if (e.type === "mouseenter") {
-      setIsHover(true)
-    } else if (e.type === "mouseleave" && !isInteractive) {
-      setIsHover(false)
-    }
-  }
-
   const confirmDeleteExtension = (e, item) => {
     chrome.management.uninstall(item.id)
-    setIsInteractive(false)
-    setIsHover(false)
   }
 
   /**
@@ -147,11 +130,14 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
 
   return (
     <div
-      onMouseEnter={(e) => onItemMouseOver(e)}
-      onMouseLeave={(e) => onItemMouseOver(e)}
       className={classNames([
         "list-item-container",
-        { "is-enable": itemEnable, "not-enable": !itemEnable, "item-is-top": item.__top__ }
+        {
+          "is-enable": itemEnable,
+          "not-enable": !itemEnable,
+          "item-is-top": item.__top__,
+          "show-operation-always": isShowOperationAlways
+        }
       ])}>
       {contextHolder}
 
@@ -190,72 +176,68 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
           {showName}
         </span>
       )}
-      {buildOperationButton(isHover || isShowOperationButton)}
+      {buildOperationButton()}
     </div>
   )
 
-  function buildOperationButton(isHover) {
-    if (!isHover) {
-      return null
-    } else {
-      return (
-        <div className="li-operation">
-          <Switch
-            className="switch"
-            size="small"
-            checked={itemEnable}
-            onChange={(e) => onSwitchChange(e, item)}></Switch>
+  function buildOperationButton() {
+    return (
+      <div className="li-operation">
+        <Switch
+          className="switch"
+          size="small"
+          checked={itemEnable}
+          onChange={(e) => onSwitchChange(e, item)}></Switch>
 
-          <Tooltip title={getLang("extension_settings")}>
-            <Button
-              type="text"
-              icon={<ToolOutlined />}
-              onClick={(e) => handleOriginSettingButtonClick(e, item)}></Button>
-          </Tooltip>
-
-          <Tooltip title={getLang("option_title")}>
-            <Button
-              disabled={!existOptionPage}
-              type="text"
-              icon={<SettingOutlined />}
-              onClick={(e) => handleSettingButtonClick(e, item)}
-            />
-          </Tooltip>
-
-          <Tooltip title={getLang("rename_extension") || "重命名"}>
-            <Button type="text" icon={<EditOutlined />} onClick={(e) => handleEnterEdit(e)} />
-          </Tooltip>
-
-          <Tooltip title={getLang("detail_webstore")}>
-            <Button
-              disabled={!existHomePage}
-              type="text"
-              icon={<ShopOutlined />}
-              onClick={(e) => handleHomeButtonClick(e, item)}
-            />
-          </Tooltip>
-
-          {item.homepageUrl && item.homepageUrl !== getHomepageUrl(item, true) && (
-            <Tooltip title={getLang("detail_homepage") || "主页"}>
-              <Button
-                type="text"
-                icon={<HomeOutlined />}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  chrome.tabs.create({ url: item.homepageUrl })
-                }}
-              />
-            </Tooltip>
-          )}
-
+        <Tooltip title={getLang("extension_settings")}>
           <Button
             type="text"
-            icon={<DeleteOutlined />}
-            onClick={(e) => confirmDeleteExtension(e, item)}
+            icon={<ToolOutlined />}
+            onClick={(e) => handleOriginSettingButtonClick(e, item)}></Button>
+        </Tooltip>
+
+        <Tooltip title={getLang("option_title")}>
+          <Button
+            disabled={!existOptionPage}
+            type="text"
+            icon={<SettingOutlined />}
+            onClick={(e) => handleSettingButtonClick(e, item)}
           />
-        </div>
-      )
-    }
+        </Tooltip>
+
+        <Tooltip title={getLang("rename_extension") || "重命名"}>
+          <Button type="text" icon={<EditOutlined />} onClick={(e) => handleEnterEdit(e)} />
+        </Tooltip>
+
+        <Tooltip title={getLang("detail_webstore")}>
+          <Button
+            disabled={!existHomePage}
+            type="text"
+            icon={<ShopOutlined />}
+            onClick={(e) => handleHomeButtonClick(e, item)}
+          />
+        </Tooltip>
+
+        {item.homepageUrl && item.homepageUrl !== getHomepageUrl(item, true) && (
+          <Tooltip title={getLang("detail_homepage") || "主页"}>
+            <Button
+              type="text"
+              icon={<HomeOutlined />}
+              onClick={(e) => {
+                e.stopPropagation()
+                chrome.tabs.create({ url: item.homepageUrl })
+              }}
+            />
+          </Tooltip>
+        )}
+
+        <Button
+          type="text"
+          icon={<DeleteOutlined />}
+          onClick={(e) => confirmDeleteExtension(e, item)}
+        />
+      </div>
+    )
   }
 })
 
