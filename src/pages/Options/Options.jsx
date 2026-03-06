@@ -13,8 +13,6 @@ import About from "./about/About.jsx"
 import IndexExport from "./export/IndexExport.jsx"
 import ExtensionHistoryIndex from "./history/ExtensionHistoryIndex"
 import IndexImport from "./import/IndexImport.jsx"
-import ExtensionManageIndex from "./management/ExtensionManageIndex.jsx"
-import ExtensionManageTable from "./management/ExtensionManageTable"
 import ExtensionImport from "./management/import/ExtensionImport"
 import ExtensionShare from "./management/share/ExtensionShare"
 import ModeManagement from "./mode/IndexMode.jsx"
@@ -99,9 +97,6 @@ function Options() {
               <Route path="/" element={<Navigate to="/about" replace />}></Route>
               <Route path="/about" element={<About />} />
               <Route path="/mode" element={<ModeManagement />} />
-              <Route path="/management" element={<ExtensionManageIndex />}>
-                <Route index element={<ExtensionManageTable />} />
-              </Route>
               <Route path="/export" element={<IndexExport />}>
                 <Route index element={<ExtensionShare />} />
               </Route>
