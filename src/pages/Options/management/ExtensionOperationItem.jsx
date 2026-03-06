@@ -14,156 +14,164 @@ import styled from "styled-components"
 import { getHomepageUrl, getOriginSettingUrl } from ".../utils/extensionHelper"
 import { getLang } from ".../utils/utils"
 
-const ExtensionOperationItem = memo(({ record, options }) => {
-  const [messageApi, contextHolder] = message.useMessage()
-  const [itemEnable, setItemEnable] = useState(record.enabled)
+const ExtensionOperationItem = memo(
+  ({ record, options, onEnableChange, checkedOverride, onChangeOverride }) => {
+    const [messageApi, contextHolder] = message.useMessage()
+    const [itemEnable, setItemEnable] = useState(checkedOverride ?? record.enabled)
 
-  // 获取商店 URL
-  const webStoreUrl = getHomepageUrl(record, true)
+    // 获取商店 URL
+    const webStoreUrl = getHomepageUrl(record, true)
 
-  // 判断是否是商店链接（只有真正的商店扩展才有商店图标）
-  const isStoreExtension =
-    webStoreUrl &&
-    (webStoreUrl.includes("chrome.google.com") ||
-      webStoreUrl.includes("chromewebstore.google.com") ||
-      webStoreUrl.includes("microsoftedge.microsoft.com") ||
-      webStoreUrl.includes("addons.mozilla.org"))
+    // 判断是否是商店链接（只有真正的商店扩展才有商店图标）
+    const isStoreExtension =
+      webStoreUrl &&
+      (webStoreUrl.includes("chrome.google.com") ||
+        webStoreUrl.includes("chromewebstore.google.com") ||
+        webStoreUrl.includes("microsoftedge.microsoft.com") ||
+        webStoreUrl.includes("addons.mozilla.org"))
 
-  // 判断是否显示主页图标
-  // - 如果是商店扩展：只有当主页与商店链接不同时才显示
-  // - 如果不是商店扩展（如本地开发）：显示主页图标
-  const showHomepageIcon =
-    record.homepageUrl && (!isStoreExtension || record.homepageUrl !== webStoreUrl)
+    // 判断是否显示主页图标
+    // - 如果是商店扩展：只有当主页与商店链接不同时才显示
+    // - 如果不是商店扩展（如本地开发）：显示主页图标
+    const showHomepageIcon =
+      record.homepageUrl && (!isStoreExtension || record.homepageUrl !== webStoreUrl)
 
-  /**
-   * 启用与禁用扩展
-   */
-  const onSwitchChange = async (checked, item) => {
-    await chrome.management.setEnabled(item.id, checked)
-    setItemEnable(checked)
-    item.enabled = checked
-  }
-
-  /**
-   * 打开扩展设置页面
-   */
-  const handleSettingButtonClick = (e, item) => {
-    e.stopPropagation()
-    if (item.optionsUrl) {
-      if (!item.enabled) {
-        messageApi.info(getLang("extension_not_enable"))
+    /**
+     * 启用与禁用扩展
+     */
+    const onSwitchChange = async (checked, item) => {
+      if (onChangeOverride) {
+        onChangeOverride(checked, item)
+        setItemEnable(checked)
         return
       }
-      chrome.tabs.create({ url: item.optionsUrl })
+      await chrome.management.setEnabled(item.id, checked)
+      setItemEnable(checked)
+      item.enabled = checked
+      onEnableChange?.()
     }
-  }
 
-  /**
-   * 打开浏览器自带的扩展设置页面
-   */
-  const handleOriginSettingButtonClick = (e, item) => {
-    e.stopPropagation()
-    const url = getOriginSettingUrl(item)
-    if (url) {
-      chrome.tabs.create({ url })
+    /**
+     * 打开扩展设置页面
+     */
+    const handleSettingButtonClick = (e, item) => {
+      e.stopPropagation()
+      if (item.optionsUrl) {
+        if (!item.enabled) {
+          messageApi.info(getLang("extension_not_enable"))
+          return
+        }
+        chrome.tabs.create({ url: item.optionsUrl })
+      }
     }
-  }
 
-  /**
-   * 打开商店链接
-   */
-  const handleStoreClick = (e) => {
-    e.stopPropagation()
-    // 只有真正的商店扩展才能打开商店链接
-    if (isStoreExtension && webStoreUrl) {
-      chrome.tabs.create({ url: webStoreUrl })
+    /**
+     * 打开浏览器自带的扩展设置页面
+     */
+    const handleOriginSettingButtonClick = (e, item) => {
+      e.stopPropagation()
+      const url = getOriginSettingUrl(item)
+      if (url) {
+        chrome.tabs.create({ url })
+      }
     }
-  }
 
-  /**
-   * 打开主页链接
-   */
-  const handleHomepageClick = (e) => {
-    e.stopPropagation()
-    // 使用与 showHomepageIcon 相同的逻辑
-    if (showHomepageIcon && record.homepageUrl) {
-      chrome.tabs.create({ url: record.homepageUrl })
+    /**
+     * 打开商店链接
+     */
+    const handleStoreClick = (e) => {
+      e.stopPropagation()
+      // 只有真正的商店扩展才能打开商店链接
+      if (isStoreExtension && webStoreUrl) {
+        chrome.tabs.create({ url: webStoreUrl })
+      }
     }
-  }
 
-  /**
-   * 删除扩展
-   */
-  const confirmDeleteExtension = (e, item) => {
-    e.stopPropagation()
-    chrome.management.uninstall(item.id)
-  }
+    /**
+     * 打开主页链接
+     */
+    const handleHomepageClick = (e) => {
+      e.stopPropagation()
+      // 使用与 showHomepageIcon 相同的逻辑
+      if (showHomepageIcon && record.homepageUrl) {
+        chrome.tabs.create({ url: record.homepageUrl })
+      }
+    }
 
-  return (
-    <Style onClick={(e) => e.stopPropagation()}>
-      {contextHolder}
+    /**
+     * 删除扩展
+     */
+    const confirmDeleteExtension = (e, item) => {
+      e.stopPropagation()
+      chrome.management.uninstall(item.id)
+    }
 
-      <Switch
-        size="small"
-        checked={itemEnable}
-        onClick={(_, e) => e?.stopPropagation()}
-        onChange={(checked, e) => {
-          e?.stopPropagation()
-          onSwitchChange(checked, record)
-        }}></Switch>
+    return (
+      <Style onClick={(e) => e.stopPropagation()}>
+        {contextHolder}
 
-      <Tooltip title={getLang("extension_settings")}>
-        <Space
-          className="operation-menu-item"
-          onClick={(e) => handleOriginSettingButtonClick(e, record)}>
-          <ToolOutlined />
-        </Space>
-      </Tooltip>
+        <Switch
+          size="small"
+          checked={itemEnable}
+          onClick={(_, e) => e?.stopPropagation()}
+          onChange={(checked, e) => {
+            e?.stopPropagation()
+            onSwitchChange(checked, record)
+          }}></Switch>
 
-      <Tooltip title={getLang("option_title")}>
-        <Space
-          className={classNames({
-            "operation-menu-item-disabled": !record.optionsUrl,
-            "operation-menu-item": record.optionsUrl
-          })}
-          onClick={(e) => handleSettingButtonClick(e, record)}>
-          <SettingOutlined />
-        </Space>
-      </Tooltip>
-
-      <Tooltip title={getLang("detail_webstore")}>
-        <Space
-          className={classNames({
-            "operation-menu-item-disabled": !isStoreExtension,
-            "operation-menu-item": isStoreExtension
-          })}
-          onClick={handleStoreClick}>
-          <ShopOutlined />
-        </Space>
-      </Tooltip>
-
-      {/* 主页图标 - 仅当主页与商店不同时显示 */}
-      {showHomepageIcon && (
-        <Tooltip title={getLang("detail_homepage")}>
+        <Tooltip title={getLang("extension_settings")}>
           <Space
-            className={classNames({
-              "operation-menu-item-disabled": !record.homepageUrl,
-              "operation-menu-item": record.homepageUrl
-            })}
-            onClick={handleHomepageClick}>
-            <HomeOutlined />
+            className="operation-menu-item"
+            onClick={(e) => handleOriginSettingButtonClick(e, record)}>
+            <ToolOutlined />
           </Space>
         </Tooltip>
-      )}
 
-      <Tooltip title={getLang("uninstall_extension")} >
-        <Space className="operation-menu-item" onClick={(e) => confirmDeleteExtension(e, record)}>
-          <DeleteOutlined />
-        </Space>
-      </Tooltip>
-    </Style>
-  )
-})
+        <Tooltip title={getLang("option_title")}>
+          <Space
+            className={classNames({
+              "operation-menu-item-disabled": !record.optionsUrl,
+              "operation-menu-item": record.optionsUrl
+            })}
+            onClick={(e) => handleSettingButtonClick(e, record)}>
+            <SettingOutlined />
+          </Space>
+        </Tooltip>
+
+        <Tooltip title={getLang("detail_webstore")}>
+          <Space
+            className={classNames({
+              "operation-menu-item-disabled": !isStoreExtension,
+              "operation-menu-item": isStoreExtension
+            })}
+            onClick={handleStoreClick}>
+            <ShopOutlined />
+          </Space>
+        </Tooltip>
+
+        {/* 主页图标 - 仅当主页与商店不同时显示 */}
+        {showHomepageIcon && (
+          <Tooltip title={getLang("detail_homepage")}>
+            <Space
+              className={classNames({
+                "operation-menu-item-disabled": !record.homepageUrl,
+                "operation-menu-item": record.homepageUrl
+              })}
+              onClick={handleHomepageClick}>
+              <HomeOutlined />
+            </Space>
+          </Tooltip>
+        )}
+
+        <Tooltip title={getLang("uninstall_extension")}>
+          <Space className="operation-menu-item" onClick={(e) => confirmDeleteExtension(e, record)}>
+            <DeleteOutlined />
+          </Space>
+        </Tooltip>
+      </Style>
+    )
+  }
+)
 
 export default ExtensionOperationItem
 

@@ -148,35 +148,8 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: "src/assets/icon-128.png",
-          to: path.join(__dirname, "build"),
-          force: true
-        }
-      ]
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: "src/assets/icon-64.png",
-          to: path.join(__dirname, "build"),
-          force: true
-        }
-      ]
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: "src/assets/icon-48.png",
-          to: path.join(__dirname, "build"),
-          force: true
-        }
-      ]
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: "src/assets/icon-32.png",
-          to: path.join(__dirname, "build"),
+          from: "src/assets",
+          to: "assets",
           force: true
         }
       ]

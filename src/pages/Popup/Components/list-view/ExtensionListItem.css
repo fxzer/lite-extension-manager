@@ -41,6 +41,14 @@
   user-select: none;
 }
 
+.list-item-container .ext-name-input {
+  flex: 1;
+  min-width: 0;
+  margin-left: 2px;
+  height: 24px;
+  font-size: 12px;
+}
+
 .list-item-container > .ext-name:hover {
   color: #555;
 }

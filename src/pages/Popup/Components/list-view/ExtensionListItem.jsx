@@ -1,12 +1,21 @@
 import React, { memo, useEffect, useState } from "react"
 
-import { DeleteOutlined, SettingOutlined, ShopOutlined, ToolOutlined } from "@ant-design/icons"
-import { Button, message, Switch, Tooltip } from "antd"
+import {
+  CloseCircleFilled,
+  DeleteOutlined,
+  EditOutlined,
+  HomeOutlined,
+  SettingOutlined,
+  ShopOutlined,
+  ToolOutlined
+} from "@ant-design/icons"
+import { Button, Input, Switch, Tooltip, message } from "antd"
 import classNames from "classnames"
 
 import "./ExtensionListItem.css"
 
 import { ManualEnableCounter } from ".../storage/local/ManualEnableCounter"
+import { storage } from ".../storage/sync"
 import { getHomepageUrl, getIcon, getOriginSettingUrl } from ".../utils/extensionHelper.js"
 import { getLang } from ".../utils/utils"
 import { isStringEmpty } from ".../utils/utils.js"
@@ -26,6 +35,11 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
   const [itemEnable, setItemEnable] = useState(enabled ?? item.enabled)
   const existOptionPage = !isStringEmpty(item.optionsUrl)
   const existHomePage = !isStringEmpty(item.homepageUrl)
+
+  // 扩展名编辑
+  const [isEditing, setIsEditing] = useState(false)
+  const [editValue, setEditValue] = useState(item.__attach__?.alias || "")
+  const [displayAlias, setDisplayAlias] = useState(item.__attach__?.alias || "")
 
   // 禁用扩展使用灰色（默认启用）
   const grayStyleOfDisable = options.setting.isGaryStyleOfDisableInGridView ?? true
@@ -101,7 +115,35 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
   }
 
   // 如果存在别名，则显示别名
-  const showName = item.__attach__?.alias ? item.__attach__?.alias : item.name
+  const showName = displayAlias || item.name
+
+  // 保存别名
+  const handleAliasSave = async () => {
+    const newValue = editValue.trim()
+    setIsEditing(false)
+
+    if (newValue === (displayAlias || "")) {
+      return
+    }
+
+    try {
+      await storage.management.updateExtension(item.id, { alias: newValue })
+      if (item.__attach__) {
+        item.__attach__.alias = newValue
+      }
+      setDisplayAlias(newValue)
+      messageApi.success(getLang("save_success"))
+    } catch (error) {
+      messageApi.error(getLang("save_failed"))
+      setEditValue(displayAlias || "")
+    }
+  }
+
+  const handleEnterEdit = (e) => {
+    e.stopPropagation()
+    setIsEditing(true)
+    setEditValue(showName)
+  }
 
   return (
     <div
@@ -121,9 +163,33 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
         <img src={getIcon(item, 128)} alt="" />
       </div>
 
-      <span className="ext-name" onClick={(e) => onItemNameClick(e, item)}>
-        {showName}
-      </span>
+      {isEditing ? (
+        <Input
+          className="ext-name-input"
+          size="small"
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onBlur={handleAliasSave}
+          onKeyDown={(e) => e.key === "Enter" && handleAliasSave()}
+          maxLength={50}
+          autoFocus
+          onClick={(e) => e.stopPropagation()}
+          placeholder={item.name}
+          suffix={
+            editValue && (
+              <CloseCircleFilled
+                style={{ color: "#bbb", fontSize: 12, cursor: "pointer" }}
+                onClick={() => setEditValue("")}
+                onMouseDown={(e) => e.preventDefault()}
+              />
+            )
+          }
+        />
+      ) : (
+        <span className="ext-name" onClick={(e) => onItemNameClick(e, item)}>
+          {showName}
+        </span>
+      )}
       {buildOperationButton(isHover || isShowOperationButton)}
     </div>
   )
@@ -156,6 +222,10 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
             />
           </Tooltip>
 
+          <Tooltip title={getLang("rename_extension") || "重命名"}>
+            <Button type="text" icon={<EditOutlined />} onClick={(e) => handleEnterEdit(e)} />
+          </Tooltip>
+
           <Tooltip title={getLang("detail_webstore")}>
             <Button
               disabled={!existHomePage}
@@ -165,6 +235,18 @@ const ExtensionListItem = memo(({ item, enabled, options, currentMode, onItemEna
             />
           </Tooltip>
 
+          {item.homepageUrl && item.homepageUrl !== getHomepageUrl(item, true) && (
+            <Tooltip title={getLang("detail_homepage") || "主页"}>
+              <Button
+                type="text"
+                icon={<HomeOutlined />}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  chrome.tabs.create({ url: item.homepageUrl })
+                }}
+              />
+            </Tooltip>
+          )}
 
           <Button
             type="text"
