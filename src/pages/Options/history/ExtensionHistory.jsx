@@ -262,7 +262,7 @@ const ExtensionHistory = memo(({ records, hiddenExtensionIds, loading }) => {
           {/* 搜索 */}
           <Search
             className="search"
-            placeholder=""
+            placeholder={getLang("history_search_placeholder") || "可按扩展名或ID搜索"}
             allowClear
             value={searchWord}
             onSearch={onSearch}

@@ -4,6 +4,7 @@ import { DownOutlined } from "@ant-design/icons"
 import { Button, Dropdown } from "antd"
 
 import { LocalOptions } from ".../storage/local/LocalOptions"
+import { formatModes } from "../../../../../storage/sync/ModeOptions"
 import { getLang } from ".../utils/utils"
 
 const localOptions = new LocalOptions()
@@ -12,10 +13,10 @@ const ModeDropdown = memo(({ options, className, onModeChanged }) => {
   const { modes: rawModes } = options
   const [selectedMode, setSelectedMode] = useState(null)
 
-  // 确保 modes 至少包含默认模式
+  // 确保 modes 至少包含默认模式，并使用 formatModes 进行国际化处理
   const modes = useMemo(() => {
     if (rawModes?.length > 0) {
-      return rawModes
+      return formatModes(rawModes)
     }
     return [{ id: "default", name: getLang("mode_default_name") }]
   }, [rawModes])

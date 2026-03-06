@@ -102,10 +102,10 @@
     "message": "Settings"
   },
   "management_import_title": {
-    "message": "Import Extension"
+    "message": "Import"
   },
   "management_export_title": {
-    "message": "Export Extension"
+    "message": "Export"
   },
   "history_title": {
     "message": "History"
@@ -276,7 +276,7 @@
     "message": "Default Template"
   },
   "mode_title": {
-    "message": "Focus Modes"
+    "message": "Modes"
   },
   "mode_new": {
     "message": "New Mode"
@@ -404,9 +404,6 @@
   "data_save_failed_quota": {
     "message": "Save failed, exceeded browser storage limit"
   },
-  "history_feature_closed": {
-    "message": "History feature is disabled"
-  },
   "get_short_name_failed": {
     "message": "Failed to get short name from extension data"
   },
@@ -442,5 +439,8 @@
   },
   "history_feature_closed": {
     "message": "History feature is disabled"
+  },
+  "history_search_placeholder": {
+    "message": "Search by extension name or ID"
   }
 }

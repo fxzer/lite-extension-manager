@@ -87,7 +87,7 @@ export const ModeNavStyle = styled.div`
     /* 编辑输入框 */
     .edit-input {
       width: auto;
-      min-width: 40px;
+      min-width: 50px;
       max-width: 60px;
       border: none;
       background: transparent;

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react"
+import React, { memo, useCallback, useState, useEffect } from "react"
 
 import { EyeInvisibleOutlined, EyeOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons"
 import { Divider, Empty } from "antd"
@@ -10,6 +10,8 @@ import { getLang } from "../../../../utils/utils"
 import { usePopupExtensions } from "../../utils/usePopupExtensions"
 import ExtensionGridItem from "./ExtensionGridItem"
 
+const INITIAL_RENDER_COUNT = 30
+
 const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivider }) => {
   const [moved, setMoved] = useState("") // 没有业务意义，就是一个依赖值，值发生变化，则重新执行 usePopupExtensions
 
@@ -18,6 +20,28 @@ const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivi
   const items0 = items.top
   const items1 = items.enabled
   const items2 = items.disabled
+
+  const [visibleCount, setVisibleCount] = useState(INITIAL_RENDER_COUNT)
+
+  useEffect(() => {
+    const totalItems = items0.length + items1.length + items2.length
+    if (totalItems > INITIAL_RENDER_COUNT && visibleCount === INITIAL_RENDER_COUNT) {
+      const timer = setTimeout(() => {
+        setVisibleCount(totalItems)
+      }, 50)
+      return () => clearTimeout(timer)
+    }
+  }, [items0.length, items1.length, items2.length, visibleCount])
+
+  let remainingCount = visibleCount
+  
+  const displayItems0 = items0.slice(0, remainingCount)
+  remainingCount = Math.max(0, remainingCount - items0.length)
+  
+  const displayItems1 = items1.slice(0, remainingCount)
+  remainingCount = Math.max(0, remainingCount - items1.length)
+  
+  const displayItems2 = items2.slice(0, remainingCount)
 
   // 1. 显示/隐藏名称控制（本地 state 保证立即响应）
   const [isShowAppName, setIsShowAppName] = useState(options.setting.isShowAppNameInGirdView ?? true)
@@ -115,8 +139,8 @@ const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivi
         </GridEmptyWrapper>
       ) : (
         <>
-          <ul>
-            {items0.map((item) => {
+          {displayItems0.length > 0 && (<ul>
+            {displayItems0.map((item) => {
               return (
                 <li key={item.id}>
                   <ExtensionGridItem
@@ -130,10 +154,10 @@ const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivi
             {new Array(10).fill("").map((_, index) => (
               <i key={index}></i>
             ))}
-          </ul>
-          {dividerShow0 && <div className="divider"></div>}
-          <ul>
-            {items1.map((item) => {
+          </ul>)}
+          {dividerShow0 && displayItems1.length > 0 && <div className="divider"></div>}
+          {displayItems1.length > 0 && (<ul>
+            {displayItems1.map((item) => {
               return (
                 <li key={item.id}>
                   <ExtensionGridItem
@@ -148,12 +172,12 @@ const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivi
             {new Array(10).fill("").map((_, index) => (
               <i key={index}></i>
             ))}
-          </ul>
-          {items1.length > 0 && items2.length > 0 && (
+          </ul>)}
+          {displayItems1.length > 0 && displayItems2.length > 0 && (
             <Divider style={{ margin: "8px 10px", fontSize: "12px" }}>未启用</Divider>
           )}
-          <ul>
-            {items2.map((item) => {
+          {displayItems2.length > 0 && (<ul>
+            {displayItems2.map((item) => {
               return (
                 <li key={item.id}>
                   <ExtensionGridItem
@@ -168,7 +192,7 @@ const ExtensionGrid = memo(({ extensions, options, currentMode, isShowBottomDivi
             {new Array(10).fill("").map((_, index) => (
               <i key={index}></i>
             ))}
-          </ul>
+          </ul>)}
           {isShowBottomDivider && <div className="divider"></div>}
         </>
       )}

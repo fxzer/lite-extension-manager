@@ -281,18 +281,18 @@ const ExtensionGridItem = memo(({ item, options, isShowAppName: isShowAppNamePro
             className="operation-menu-item"
             onClick={(e) => handleOriginSettingButtonClick(e, item)}>
             <ToolOutlined />
-            <span>设置</span>
+            <span>{getLang("extension_settings")}</span>
           </div>
           {existOptionPage && (
             <div className="operation-menu-item" onClick={(e) => handleSettingButtonClick(e, item)}>
               <SettingOutlined />
-              <span>选项</span>
+              <span>{getLang("option_title")}</span>
             </div>
           )}
           {existHomePage && (
             <div className="operation-menu-item" onClick={(e) => handleHomeButtonClick(e, item)}>
               <ShopOutlined />
-              <span>商店</span>
+              <span>{getLang("detail_webstore")}</span>
             </div>
           )}
           <div className="operation-menu-divider"></div>
@@ -300,7 +300,7 @@ const ExtensionGridItem = memo(({ item, options, isShowAppName: isShowAppNamePro
             className="operation-menu-item operation-menu-item-danger"
             onClick={(e) => confirmDeleteExtension(e, item)}>
             <DeleteOutlined />
-            <span>卸载</span>
+            <span>{getLang("uninstall_extension")}</span>
           </div>
         </div>
       </div>

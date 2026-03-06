@@ -416,9 +416,6 @@
   "data_save_failed_quota": {
     "message": "保存配置失败，超过浏览器存储限制"
   },
-  "history_feature_closed": {
-    "message": "历史记录功能已关闭"
-  },
   "get_short_name_failed": {
     "message": "尝试从扩展数据中获取短名称失败"
   },
@@ -454,5 +451,8 @@
   },
   "history_feature_closed": {
     "message": "历史记录功能已关闭"
+  },
+  "history_search_placeholder": {
+    "message": "可按扩展名或ID搜索"
   }
 }
