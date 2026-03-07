@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react"
 
-import { GithubOutlined, } from "@ant-design/icons"
-import { Button, } from "antd"
+import { GithubOutlined } from "@ant-design/icons"
+import { Button } from "antd"
 import newGithubIssueUrl from "new-github-issue-url"
-import { useTheme } from "styled-components"
 
-import DarkIcon from ".../assets/Dark.svg"
 import LightIcon from ".../assets/Light.svg"
 import { storage } from ".../storage/sync"
 import { getLang } from ".../utils/utils"
@@ -13,9 +11,6 @@ import Title from "../Title.jsx"
 import { AboutStyle } from "./AboutStyle"
 
 function About() {
-  const theme = useTheme()
-  const isDarkMode = theme.bg === "#242529"
-
   const [version, setVersion] = useState("UNKNOWN")
   const [storageMessage, setStorageMessage] = useState("")
 
@@ -31,7 +26,6 @@ function About() {
       setStorageMessage(`Cloud Storage Usage: ${use}KB / 100KB`)
     })
   }, [])
-
 
   const openIssue = () => {
     const url = newGithubIssueUrl({
@@ -53,13 +47,12 @@ ${navigator.userAgent}`
     })
   }
 
-
   return (
     <AboutStyle>
       <Title title={getLang("about_title")}></Title>
 
       <div className="header-icon">
-        <img src={isDarkMode ? DarkIcon : LightIcon} alt="icon" />
+        <img src={LightIcon} alt="icon" />
         <div className="header-icon-text">
           <h3>Lite Extension Manager</h3>
           <span>{getLang("ext_desc")}</span>
