@@ -1,6 +1,6 @@
 {
   "name": "lite-extension-manager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "一个轻量、支持模式管理的浏览器扩展管理工具，基于 auto-extension-manager 修改而来。",
   "license": "AGPL-3.0",
   "repository": {
@@ -14,7 +14,7 @@
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.29.2",
+    "@ant-design/icons": "^5.2.6",
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/sortable": "^7.0.2",
     "@dnd-kit/utilities": "^3.2.1",

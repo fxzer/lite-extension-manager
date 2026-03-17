@@ -13,10 +13,29 @@ const forage = localforage.createInstance({
 
 /**
  * 获取配置信息（优先缓存，后台刷新）
+ * 如果有新扩展安装标志，跳过缓存直接获取最新数据
  */
 async function getOptionsWithCache() {
   try {
-    // 先尝试从缓存读取（快速响应）
+    // 检查是否有新扩展安装标志
+    const installFlag = await new Promise((resolve) => {
+      chrome.storage.local.get("_extensionRecentlyInstalled", (result) => {
+        resolve(result._extensionRecentlyInstalled)
+      })
+    })
+
+    // 如果有新扩展安装标志，跳过缓存
+    if (installFlag) {
+      console.log("[prepare] New extension detected, skipping cache")
+      // 清除标志
+      chrome.storage.local.remove("_extensionRecentlyInstalled")
+      // 直接从 storage 获取
+      const allOptions = await storage.options.getAll()
+      await forage.setItem("all_options", allOptions)
+      return allOptions
+    }
+
+    // 正常缓存逻辑
     const cachedOptions = await forage.getItem("all_options")
     if (cachedOptions) {
       // 后台静默刷新最新数据（不阻塞）

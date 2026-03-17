@@ -133,6 +133,36 @@ export const ModeOptions = {
     })
 
     await SyncOptionsStorage.set({ modes: orderedModes })
+  },
+
+  /**
+   * 将扩展添加到指定分组
+   * @param {string} modeId 分组 ID
+   * @param {string} extensionId 扩展 ID
+   */
+  async addExtensionToMode(modeId, extensionId) {
+    const all = await SyncOptionsStorage.getAll()
+    if (!all.modes) {
+      return
+    }
+
+    const mode = all.modes.find((m) => m.id === modeId)
+    if (!mode) {
+      console.warn(`[ModeOptions] Mode not found: ${modeId}`)
+      return
+    }
+
+    // 确保 extensions 数组存在
+    if (!mode.extensions) {
+      mode.extensions = []
+    }
+
+    // 避免重复添加
+    if (!mode.extensions.includes(extensionId)) {
+      mode.extensions.push(extensionId)
+      await SyncOptionsStorage.set({ modes: all.modes })
+      console.log(`[ModeOptions] Added extension ${extensionId} to mode ${modeId}`)
+    }
   }
 }
 

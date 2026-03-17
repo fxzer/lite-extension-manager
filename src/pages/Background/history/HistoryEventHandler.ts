@@ -5,6 +5,7 @@ import logger from ".../utils/logger"
 import { ExtensionRecord } from "../extension/ExtensionRecord"
 import { HistoryService } from "./HistoryService"
 import { HistoryRecord } from "./Record"
+import { ModeOptions } from ".../storage/sync/ModeOptions.js"
 
 /**
  * 历史记录关心的事件，这里是原始事件
@@ -137,6 +138,54 @@ export class HistoryEventRaiser {
       })
     }
     this.EM.LocalOptions.setNeedBuildExtensionIcon(true)
+
+    // 新安装的扩展自动加入当前激活分组
+    if (isInstall) {
+      await this.addExtensionToActiveMode(info.id)
+    }
+  }
+
+  /**
+   * 将新安装的扩展加入当前激活分组
+   * 如果没有激活分组，则加入默认分组
+   * 同时清除 Popup 缓存，确保下次打开时获取最新数据
+   */
+  private async addExtensionToActiveMode(extensionId: string) {
+    try {
+      const activeModeId = await this.EM.LocalOptions.getActiveModeId()
+
+      // 确定要添加到的目标分组
+      let targetModeId = activeModeId
+
+      // 如果没有激活分组或激活的是 "all"，使用默认分组
+      if (!targetModeId || targetModeId === "all" || targetModeId === "") {
+        targetModeId = "default"
+        console.log(`[HistoryEventHandler] No active mode, adding extension ${extensionId} to default group`)
+      }
+
+      await ModeOptions.addExtensionToMode(targetModeId, extensionId)
+      console.log(`[HistoryEventHandler] Added extension ${extensionId} to mode ${targetModeId}`)
+
+      // 设置标志位通知 Popup 有新扩展安装
+      await this.setExtensionInstalledFlag()
+    } catch (error) {
+      logger().warn("[HistoryEventHandler] Failed to add extension to active mode:", error)
+    }
+  }
+
+  /**
+   * 设置标志位通知 Popup 有新扩展安装
+   * Popup 检测到此标志后会跳过缓存重新获取数据
+   */
+  private async setExtensionInstalledFlag() {
+    try {
+      await new Promise<void>((resolve) => {
+        chrome.storage.local.set({ _extensionRecentlyInstalled: Date.now() }, () => resolve())
+      })
+      console.log("[HistoryEventHandler] Extension installed flag set")
+    } catch (error) {
+      logger().warn("[HistoryEventHandler] Failed to set installed flag:", error)
+    }
   }
 
   public async onUninstalled(info: chrome.management.ExtensionInfo) {
