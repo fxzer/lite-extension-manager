@@ -2,6 +2,7 @@ import localforage from "localforage"
 
 import { getPopupWidth } from ".../pages/Popup/utils/popupLayoutHelper"
 import storage from ".../storage/sync"
+import { ModeOptions } from ".../storage/sync/ModeOptions"
 import { appendAdditionInfo } from ".../utils/extensionHelper"
 
 const forage = localforage.createInstance({
@@ -30,7 +31,11 @@ async function getOptionsWithCache() {
       // 清除标志
       chrome.storage.local.remove("_extensionRecentlyInstalled")
       // 直接从 storage 获取最新数据并缓存
-      const allOptions = await storage.options.getAll()
+      let allOptions = await storage.options.getAll()
+      // ✅ 确保内置模式存在
+      await ModeOptions.getModes()
+      // 重新获取以确保 modes 数组完整
+      allOptions = await storage.options.getAll()
       await forage.setItem("all_options", allOptions)
       console.log("[prepare] Cache updated with fresh data")
       return allOptions
@@ -39,8 +44,9 @@ async function getOptionsWithCache() {
     // 正常缓存逻辑
     const cachedOptions = await forage.getItem("all_options")
     if (cachedOptions) {
-      // ✅ 改进：立即获取最新数据并缓存（不返回旧数据）
-      // 这确保每次打开 popup 都使用最新数据
+      // ✅ 确保内置模式存在（首次访问时可能缺失）
+      await ModeOptions.getModes()
+      // ✅ 获取最新数据并缓存
       const allOptions = await storage.options.getAll()
       await forage.setItem("all_options", allOptions)
       console.log("[prepare] Cache refreshed with latest data")
@@ -51,7 +57,11 @@ async function getOptionsWithCache() {
   }
 
   // 缓存未命中或读取失败，直接从 storage 获取并缓存
-  const allOptions = await storage.options.getAll()
+  let allOptions = await storage.options.getAll()
+  // ✅ 确保内置模式存在
+  await ModeOptions.getModes()
+  // 重新获取以确保 modes 数组完整
+  allOptions = await storage.options.getAll()
   await forage.setItem("all_options", allOptions)
   return allOptions
 }
