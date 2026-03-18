@@ -58,7 +58,11 @@ var options = {
           {
             loader: "sass-loader",
             options: {
-              sourceMap: true
+              sourceMap: true,
+              api: "modern",
+              sassOptions: {
+                silenceDeprecations: ["legacy-js-api"]
+              }
             }
           }
         ]

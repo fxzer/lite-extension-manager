@@ -24,32 +24,33 @@ async function getOptionsWithCache() {
       })
     })
 
-    // 如果有新扩展安装标志，跳过缓存
+    // 如果有新扩展安装标志，跳过缓存并清除标志
     if (installFlag) {
       console.log("[prepare] New extension detected, skipping cache")
       // 清除标志
       chrome.storage.local.remove("_extensionRecentlyInstalled")
-      // 直接从 storage 获取
+      // 直接从 storage 获取最新数据并缓存
       const allOptions = await storage.options.getAll()
       await forage.setItem("all_options", allOptions)
+      console.log("[prepare] Cache updated with fresh data")
       return allOptions
     }
 
     // 正常缓存逻辑
     const cachedOptions = await forage.getItem("all_options")
     if (cachedOptions) {
-      // 后台静默刷新最新数据（不阻塞）
-      storage.options.getAll()
-        .then((allOptions) => forage.setItem("all_options", allOptions))
-        .catch(() => {}) // 静默失败，不影响当前渲染
-
-      return cachedOptions
+      // ✅ 改进：立即获取最新数据并缓存（不返回旧数据）
+      // 这确保每次打开 popup 都使用最新数据
+      const allOptions = await storage.options.getAll()
+      await forage.setItem("all_options", allOptions)
+      console.log("[prepare] Cache refreshed with latest data")
+      return allOptions
     }
-  } catch (_) {
-    // 缓存读取失败，继续从 storage 获取
+  } catch (error) {
+    console.warn("[prepare] Cache error, falling back to direct storage:", error)
   }
 
-  // 缓存未命中，直接从 storage 获取并缓存
+  // 缓存未命中或读取失败，直接从 storage 获取并缓存
   const allOptions = await storage.options.getAll()
   await forage.setItem("all_options", allOptions)
   return allOptions

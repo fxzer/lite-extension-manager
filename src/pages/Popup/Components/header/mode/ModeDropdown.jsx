@@ -25,9 +25,10 @@ const ModeDropdown = memo(({ options, className, onModeChanged }) => {
 
   // 执行模式切换（初始化和用户点击都会调用）
   const handleModeChange = useCallback(
-    (mode) => {
+    async (mode) => {
       setSelectedMode(mode)
-      localOptions.setActiveModeId(mode?.id)
+      // ✅ 确保存储操作完成后再继续
+      await localOptions.setActiveModeId(mode?.id ?? "")
 
       // ✅ 根据 raiseEnable 配置决定是否应用模式配置
       if (raiseEnable) {
@@ -56,19 +57,19 @@ const ModeDropdown = memo(({ options, className, onModeChanged }) => {
   // 初始化选中模式（会触发模式应用）
   useEffect(() => {
     if (!selectedMode && modes.length > 0) {
-      localOptions.getActiveModeId().then((modeId) => {
+      localOptions.getActiveModeId().then(async (modeId) => {
         let mode = modes.find((m) => m.id === modeId)
 
         // 如果保存的模式 ID 不存在（可能是残留数据），清除并使用默认模式
         if (modeId && !mode) {
-          localOptions.setActiveModeId("")
+          await localOptions.setActiveModeId("")
         }
 
         // 使用找到的模式或默认模式
         mode = mode || modes.find((m) => m.id === "default") || modes[0]
 
         // ✅ 初始化时也应用模式配置
-        handleModeChange(mode)
+        await handleModeChange(mode)
       })
     }
   }, [selectedMode, modes, handleModeChange])
