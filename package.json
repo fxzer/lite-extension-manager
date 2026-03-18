@@ -1,6 +1,6 @@
 {
   "name": "lite-extension-manager",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "一个轻量、支持模式管理的浏览器扩展管理工具，基于 auto-extension-manager 修改而来。",
   "license": "AGPL-3.0",
   "repository": {
