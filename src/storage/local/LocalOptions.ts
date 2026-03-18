@@ -10,7 +10,9 @@ export class LocalOptions {
 
   constructor() {
     this.forage = localforage.createInstance({
-      driver: localforage.INDEXEDDB,
+      // ✅ 优先使用 IndexedDB，如果不可用则降级到 localStorage
+      // Manifest V3 service worker 中 IndexedDB 可能受限，需要后备方案
+      driver: [localforage.INDEXEDDB, localforage.LOCALSTORAGE],
       name: DATABASE_NAME,
       version: DATABASE_VERSION,
       storeName: "options"

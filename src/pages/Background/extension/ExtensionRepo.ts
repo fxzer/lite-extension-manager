@@ -11,7 +11,8 @@ export class ExtensionRepo {
 
   constructor() {
     this.forage = localforage.createInstance({
-      driver: localforage.INDEXEDDB,
+      // ✅ 优先使用 IndexedDB，如果不可用则降级到 localStorage
+      driver: [localforage.INDEXEDDB, localforage.LOCALSTORAGE],
       name: DATABASE_NAME,
       version: DATABASE_VERSION,
       storeName: "extensions"
