@@ -218,7 +218,26 @@ export class HistoryEventRaiser {
     }
   }
 
-  public onEnabled(info: chrome.management.ExtensionInfo) {
+  /**
+   * 扩展被启用时的处理
+   * - 自动将扩展加入当前激活的模式
+   * - 记录历史
+   */
+  public async onEnabled(info: chrome.management.ExtensionInfo) {
+    // ✅ 方案A: 自动将扩展加入当前激活的模式
+    // 这样用户在浏览器扩展管理页面或商店启用扩展时，
+    // 扩展会自动加入当前模式，不会在打开 popup 时被禁用
+    try {
+      const activeModeId = await this.EM.LocalOptions.getActiveModeId()
+      if (activeModeId && activeModeId !== "all") {
+        await ModeOptions.addExtensionToMode(activeModeId, info.id)
+        console.log(`[HistoryEventHandler] Extension ${info.id} enabled, added to mode ${activeModeId}`)
+      }
+    } catch (error) {
+      logger().warn("[HistoryEventHandler] Failed to add extension to active mode:", error)
+    }
+
+    // 记录历史
     this.service.add(HistoryRecord.buildPlain(info, "enabled"))
   }
 
