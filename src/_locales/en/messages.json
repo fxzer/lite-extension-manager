@@ -338,6 +338,12 @@
   "mode_search_placeholder": {
     "message": "Search Extensions"
   },
+  "mode_enable_all": {
+    "message": "Enable All"
+  },
+  "mode_enable_all_tooltip": {
+    "message": "Add all disabled extensions to this mode"
+  },
   "sort_frequency": {
     "message": "Frequency"
   },

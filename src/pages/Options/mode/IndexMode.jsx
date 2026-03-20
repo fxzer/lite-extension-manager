@@ -42,7 +42,7 @@ function ModeManagement() {
   // 未模式扩展中，不显示其它模式的扩展
   const [hiddenOtherGroupInNoneGroup, setHiddenOtherGroupInNoneGroup] = useState(false)
 
-  const [enabledExtensions, disabledExtensions, onItemClick] = useModeItems(
+  const [enabledExtensions, disabledExtensions, onItemClick, onEnableAll, onDisableAll] = useModeItems(
     selectedMode,
     modeListInfo,
     extensions,
@@ -231,7 +231,9 @@ function ModeManagement() {
                 mode={selectedMode}
                 modeList={modeListInfo}
                 options={options}
-                onItemClick={onItemClick}>
+                onItemClick={onItemClick}
+                onEnableAll={onEnableAll}
+                onDisableAll={onDisableAll}>
                 <div className="setting-item">
                   <span>排除其他模式中的扩展</span>
                   <Switch

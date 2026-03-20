@@ -1,3 +1,4 @@
+import ".../utils/devConsoleFilter"
 import React, { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { HashRouter } from "react-router-dom"
@@ -22,7 +23,11 @@ const container = document.getElementById("app-container")
 const root = createRoot(container)
 root.render(
   <StrictMode>
-    <HashRouter>
+    <HashRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }}>
       <Options />
     </HashRouter>
   </StrictMode>

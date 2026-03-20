@@ -4,6 +4,10 @@ import { downloadImageDataUrl } from "./utils"
 export const getIcon = function (extension, size = 16) {
   const { icons } = extension
 
+  if (!icons || icons.length === 0) {
+    return ""
+  }
+
   // 复制数组后按尺寸从小到大排列，避免修改原始数组
   const sortedIcons = [...icons].sort((a, b) => a.size - b.size)
 
@@ -17,8 +21,7 @@ export const getIcon = function (extension, size = 16) {
     }
   }
 
-  // 如果没有找到足够大的，则返回最大的那个
-  return sortedIcons[sortedIcons.length - 1]?.url ?? defaultPuzzleIcon
+  return sortedIcons[sortedIcons.length - 1]?.url ?? ""
 }
 
 /**

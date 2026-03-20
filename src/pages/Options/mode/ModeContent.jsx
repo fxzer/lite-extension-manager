@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react"
 
-import { Divider, Empty, Input, message } from "antd"
+import { Checkbox, Divider, Empty, Input, message } from "antd"
 
 import { isExtensionMatch } from ".../utils/searchHelper"
 import { getLang } from ".../utils/utils"
@@ -13,7 +13,7 @@ const { Search } = Input
  * 模式内容：标题，在模式中的扩展，不在模式中的扩展，描述
  */
 const ModeContent = memo((props) => {
-  const { mode, modeList, options, onItemClick, enabledExtensions, disabledExtensions } = props
+  const { mode, modeList, options, onItemClick, onEnableAll, onDisableAll, enabledExtensions, disabledExtensions } = props
 
   const [messageApi, contextHolder] = message.useMessage()
 
@@ -54,6 +54,13 @@ const ModeContent = memo((props) => {
           onSearch={onSearch}
           onChange={(e) => onSearch(e.target.value)}
         />
+        <Checkbox
+          className="enable-all-checkbox"
+          checked={disabledExtensions.length === 0 && enabledExtensions.length > 0}
+          indeterminate={enabledExtensions.length > 0 && disabledExtensions.length > 0}
+          onChange={(e) => (e.target.checked ? onEnableAll() : onDisableAll())}>
+          {getLang("mode_enable_all")}
+        </Checkbox>
       </div>
 
       <Divider orientation="center">已启用</Divider>

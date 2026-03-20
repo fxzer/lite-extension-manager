@@ -38,8 +38,11 @@
 # 安装依赖
 npm install
 
-# 开发模式（Chrome）
+# 开发模式（推荐）：监听源码并输出到 build/，无 WebSocket；改代码后在 chrome://extensions 点「重新加载」
 npm start
+
+# 可选：带 webpack-dev-server + HMR（需保持进程运行，否则会报 localhost:5300 连接失败）
+npm run dev:server
 
 # 构建 Chrome 版本
 npm run build

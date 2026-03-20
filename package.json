@@ -10,7 +10,8 @@
   "scripts": {
     "build": "node utils/build.chrome.js",
     "build:edge": "node utils/build.edge.js",
-    "start": "node utils/webserver.js",
+    "start": "node utils/watch.js",
+    "dev:server": "node utils/webserver.js",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
   },
   "dependencies": {
@@ -35,7 +36,7 @@
     "react-dom": "^18.2.0",
     "react-flip-toolkit": "^7.1.0",
     "react-json-view-lite": "^1.1.0",
-    "react-router-dom": "^6.12.1",
+    "react-router-dom": "^6.30.0",
     "styled-components": "6.0.0-rc.1",
     "webext-options-sync": "^4.2.0",
     "webext-polyfill-kinda": "^1.0.2"

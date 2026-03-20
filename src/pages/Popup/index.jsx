@@ -1,3 +1,4 @@
+import ".../utils/devConsoleFilter"
 import "../../wdyr"
 
 import React from "react"

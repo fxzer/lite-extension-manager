@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import chromeP from "webext-polyfill-kinda"
 
@@ -95,7 +95,31 @@ const useModeItems = (selectedMode, modeListInfo, extensions, hiddenQuickFilter)
     }
   }
 
-  return [enabledExts, disabledExts, onItemClick]
+  // 批量将所有未启用的扩展加入当前模式
+  const onEnableAll = useCallback(async () => {
+    if (!rawDisabledExts.length || !selectedMode) return
+    const newEnabled = [...rawEnabledExts, ...rawDisabledExts]
+    setRawEnabledExts(newEnabled)
+    setRawDisabledExts([])
+    await save(newEnabled, selectedMode)
+    for (const ext of rawDisabledExts) {
+      applyToActiveMode(ext.id, selectedMode.id, true)
+    }
+  }, [rawEnabledExts, rawDisabledExts, selectedMode])
+
+  // 批量将所有已启用的扩展从当前模式移除
+  const onDisableAll = useCallback(async () => {
+    if (!rawEnabledExts.length || !selectedMode) return
+    const newDisabled = [...rawDisabledExts, ...rawEnabledExts]
+    setRawEnabledExts([])
+    setRawDisabledExts(newDisabled)
+    await save([], selectedMode)
+    for (const ext of rawEnabledExts) {
+      applyToActiveMode(ext.id, selectedMode.id, false)
+    }
+  }, [rawEnabledExts, rawDisabledExts, selectedMode])
+
+  return [enabledExts, disabledExts, onItemClick, onEnableAll, onDisableAll]
 }
 
 export default useModeItems

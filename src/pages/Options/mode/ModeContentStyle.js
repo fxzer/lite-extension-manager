@@ -21,6 +21,14 @@ export const ModeContentStyle = styled.div`
     flex: 1;
   }
 
+  .enable-all-checkbox.ant-checkbox-wrapper {
+    height: 32px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 32px;
+  }
+
   .shortcut-display {
     display: flex;
     align-items: center;

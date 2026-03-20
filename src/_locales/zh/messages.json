@@ -350,6 +350,12 @@
   "mode_search_placeholder": {
     "message": "搜索扩展"
   },
+  "mode_enable_all": {
+    "message": "全部启用"
+  },
+  "mode_enable_all_tooltip": {
+    "message": "将未启用的扩展全部加入此模式"
+  },
   "sort_frequency": {
     "message": "启用频率"
   },

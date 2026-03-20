@@ -1,3 +1,9 @@
+/**
+ * webpack-dev-server + HMR（会连接 localhost:PORT 的 WebSocket）。
+ * 扩展从磁盘加载时若未同时运行本服务，控制台会出现 ERR_CONNECTION_REFUSED。
+ * 日常开发请优先使用 `npm start`（utils/watch.js，无 WebSocket）。
+ * 需要 HMR 时再运行：`npm run dev:server`
+ */
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = "development"
 process.env.NODE_ENV = "development"
